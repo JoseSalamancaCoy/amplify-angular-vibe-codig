@@ -1,0 +1,314 @@
+/* PurpleLab OTS - Sidebar Navigation Styles */
+
+/* Variables de colores */
+:host {
+  --purplelab-primary: #79589f;
+  --purplelab-secondary: #9b7dc7;
+  --purplelab-accent: #5c4084;
+  --purplelab-neutral-100: #f8fafc;
+  --purplelab-neutral-200: #e2e8f0;
+  --purplelab-neutral-600: #64748b;
+  --purplelab-neutral-700: #475569;
+  --purplelab-neutral-800: #334155;
+  --purplelab-neutral-900: #1e293b;
+
+  /* Dimensiones del sidebar */
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 70px;
+  --sidebar-header-height: 80px;
+}
+
+/* Contenedor principal del sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: var(--sidebar-width);
+  background: linear-gradient(180deg, var(--purplelab-primary) 0%, var(--purplelab-accent) 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar colapsado */
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+/* Header del sidebar */
+.sidebar-header {
+  height: var(--sidebar-header-height);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.brand-info h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.brand-info span {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  line-height: 1;
+}
+
+.collapse-button {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.collapse-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.collapse-button .icon {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Navegación */
+.sidebar-nav {
+  flex: 1;
+  padding: 1rem 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  margin: 0.25rem 0;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-radius: 0;
+  position: relative;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.nav-item.active .nav-link {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-right: 3px solid white;
+}
+
+.nav-icon {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+  width: 24px;
+  text-align: center;
+}
+
+.nav-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+}
+
+.nav-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.nav-description {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  line-height: 1.2;
+}
+
+/* Footer del sidebar */
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-info {
+  text-align: center;
+}
+
+.footer-info p {
+  margin: 0.25rem 0;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.version {
+  font-weight: 600;
+}
+
+/* Estados colapsados */
+.sidebar.collapsed .brand-info,
+.sidebar.collapsed .nav-content,
+.sidebar.collapsed .sidebar-footer {
+  display: none;
+}
+
+.sidebar.collapsed .nav-link {
+  justify-content: center;
+  padding: 0.75rem;
+}
+
+.sidebar.collapsed .nav-icon {
+  margin-right: 0;
+}
+
+.sidebar.collapsed .collapse-button {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Overlay para móvil */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
+}
+
+/* Responsive - Móvil */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    width: var(--sidebar-width);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .sidebar.collapsed {
+    width: var(--sidebar-width);
+    transform: translateX(-100%);
+  }
+
+  .sidebar.collapsed.mobile-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    display: block;
+  }
+
+  .collapse-button {
+    display: none;
+  }
+
+  /* Forzar mostrar contenido en móvil */
+  .sidebar.mobile-open .brand-info,
+  .sidebar.mobile-open .nav-content,
+  .sidebar.mobile-open .sidebar-footer {
+    display: block !important;
+  }
+
+  .sidebar.mobile-open .nav-link {
+    justify-content: flex-start !important;
+    padding: 0.75rem 1rem !important;
+  }
+
+  .sidebar.mobile-open .nav-icon {
+    margin-right: 0.75rem !important;
+  }
+}
+
+/* Animaciones suaves */
+.nav-link, .collapse-button, .logo {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Scrollbar personalizado */
+.sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Estados de focus para accesibilidad */
+.nav-link:focus,
+.collapse-button:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* Mejoras de contraste */
+.nav-item.active .nav-link {
+  font-weight: 600;
+}
+
+.nav-item.active .nav-description {
+  opacity: 1;
+} 
