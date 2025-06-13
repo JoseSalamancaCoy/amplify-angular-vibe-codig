@@ -33,11 +33,11 @@ export class OnboardingRequirementsComponent implements OnInit {
   loading = false;
 
   crudConfig: CrudConfig = {
-    entityName: 'Requisito de Incorporación',
+    entityName: 'Onboarding Requirement',
     columns: [
       {
         key: 'destinationRoute',
-        label: 'Ruta de Destino',
+        label: 'Destination Route',
         type: 'text',
         sortable: true,
         filterable: false,
@@ -45,7 +45,7 @@ export class OnboardingRequirementsComponent implements OnInit {
       },
       {
         key: 'credentials',
-        label: 'Credenciales',
+        label: 'Credentials',
         type: 'text',
         sortable: false,
         filterable: false,
@@ -53,7 +53,7 @@ export class OnboardingRequirementsComponent implements OnInit {
       },
       {
         key: 'audienceType',
-        label: 'Tipo de Audiencia',
+        label: 'Audience Type',
         type: 'select',
         sortable: true,
         filterable: true,
@@ -66,7 +66,7 @@ export class OnboardingRequirementsComponent implements OnInit {
       },
       {
         key: 'fileFormats',
-        label: 'Formatos de Archivo',
+        label: 'File Formats',
         type: 'text',
         sortable: false,
         filterable: false,
@@ -74,21 +74,21 @@ export class OnboardingRequirementsComponent implements OnInit {
       },
       {
         key: 'otsFrequency',
-        label: 'Frecuencia OTS',
+        label: 'OTS Frequency',
         type: 'select',
         sortable: true,
         filterable: true,
         required: true,
         options: [
-          { value: 'daily', label: 'Diario' },
-          { value: 'weekly', label: 'Semanal' },
-          { value: 'monthly', label: 'Mensual' },
-          { value: 'quarterly', label: 'Trimestral' }
+          { value: 'daily', label: 'Daily' },
+          { value: 'weekly', label: 'Weekly' },
+          { value: 'monthly', label: 'Monthly' },
+          { value: 'quarterly', label: 'Quarterly' }
         ]
       },
       {
         key: 'idTypes',
-        label: 'Tipos de ID',
+        label: 'ID Types',
         type: 'text',
         sortable: false,
         filterable: false,
@@ -119,14 +119,14 @@ export class OnboardingRequirementsComponent implements OnInit {
     try {
       const result = await this.dataService.getOnboardingRequirements();
       this.onboardingRequirements = result || [];
-      console.log('Requisitos de incorporación cargados:', this.onboardingRequirements);
+      console.log('Onboarding requirements loaded:', this.onboardingRequirements);
     } catch (error) {
       console.error('Error loading onboarding requirements:', error);
       this.onboardingRequirements = [];
       if (error instanceof Error) {
-        alert(`Error al cargar los requisitos de incorporación: ${error.message}`);
+        alert(`Error loading onboarding requirements: ${error.message}`);
       } else {
-        alert('Error al cargar los requisitos de incorporación. Verifique la conexión con el backend.');
+        alert('Error loading onboarding requirements. Please check backend connection.');
       }
     } finally {
       this.loading = false;
@@ -137,10 +137,10 @@ export class OnboardingRequirementsComponent implements OnInit {
     try {
       await this.dataService.createOnboardingRequirement(requirementData);
       await this.loadOnboardingRequirements();
-      alert('Requisito de incorporación creado exitosamente');
+      alert('Onboarding requirement created successfully');
     } catch (error) {
       console.error('Error creating onboarding requirement:', error);
-      alert('Error al crear el requisito de incorporación');
+      alert('Error creating onboarding requirement');
     }
   }
 
@@ -148,10 +148,10 @@ export class OnboardingRequirementsComponent implements OnInit {
     try {
       await this.dataService.updateOnboardingRequirement(event.id, event.data);
       await this.loadOnboardingRequirements();
-      alert('Requisito de incorporación actualizado exitosamente');
+      alert('Onboarding requirement updated successfully');
     } catch (error) {
       console.error('Error updating onboarding requirement:', error);
-      alert('Error al actualizar el requisito de incorporación');
+      alert('Error updating onboarding requirement');
     }
   }
 
@@ -159,20 +159,20 @@ export class OnboardingRequirementsComponent implements OnInit {
     try {
       await this.dataService.deleteOnboardingRequirement(id);
       await this.loadOnboardingRequirements();
-      alert('Requisito de incorporación eliminado exitosamente');
+      alert('Onboarding requirement deleted successfully');
     } catch (error) {
       console.error('Error deleting onboarding requirement:', error);
-      alert('Error al eliminar el requisito de incorporación');
+      alert('Error deleting onboarding requirement');
     }
   }
 
   onExportOnboardingRequirements() {
     try {
       const csvContent = this.generateCSV(this.onboardingRequirements);
-      this.downloadCSV(csvContent, 'requisitos-incorporacion.csv');
+      this.downloadCSV(csvContent, 'onboarding-requirements.csv');
     } catch (error) {
       console.error('Error exporting onboarding requirements:', error);
-      alert('Error al exportar los requisitos de incorporación');
+      alert('Error exporting onboarding requirements');
     }
   }
 

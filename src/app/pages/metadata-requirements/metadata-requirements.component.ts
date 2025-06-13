@@ -10,36 +10,29 @@ import { CrudBaseComponent, CrudConfig } from '../../shared/components/crud-base
   template: `
     <div class="page-container">
       <div class="page-header">
-        <h1>Requisitos de Metadatos</h1>
+        <h1>Metadata Requirements</h1>
         <p class="page-description">
-          Define la estructura de archivos de metadatos requerida por cada destino
+          Define metadata file structure required by each destination
         </p>
       </div>
 
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-value">9</div>
-          <div class="stat-label">Destinos Configurados</div>
+          <div class="stat-label">Configured Destinations</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">2</div>
-          <div class="stat-label">Tipos Metadata</div>
+          <div class="stat-label">Metadata Types</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">15</div>
-          <div class="stat-label">Columnas Requeridas</div>
+          <div class="stat-label">Required Columns</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">5</div>
-          <div class="stat-label">Formatos Archivo</div>
+          <div class="stat-label">File Formats</div>
         </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <h2>Próximamente</h2>
-        </div>
-        <p>La interfaz CRUD completa estará disponible en la siguiente fase del desarrollo.</p>
       </div>
 
       <app-crud-base
@@ -134,11 +127,11 @@ export class MetadataRequirementsComponent implements OnInit {
   loading = false;
 
   crudConfig: CrudConfig = {
-    entityName: 'Requisito de Metadatos',
+    entityName: 'Metadata Requirement',
     columns: [
       {
         key: 'destinationId',
-        label: 'ID Destino',
+        label: 'Destination ID',
         type: 'text',
         sortable: true,
         filterable: false,
@@ -146,7 +139,7 @@ export class MetadataRequirementsComponent implements OnInit {
       },
       {
         key: 'metadataType',
-        label: 'Tipo de Metadatos',
+        label: 'Metadata Type',
         type: 'select',
         sortable: true,
         filterable: true,
@@ -158,7 +151,7 @@ export class MetadataRequirementsComponent implements OnInit {
       },
       {
         key: 'requiredColumns',
-        label: 'Columnas Requeridas',
+        label: 'Required Columns',
         type: 'text',
         sortable: false,
         filterable: false,
@@ -189,14 +182,14 @@ export class MetadataRequirementsComponent implements OnInit {
     try {
       const result = await this.dataService.getMetadataRequirements();
       this.metadataRequirements = result || [];
-      console.log('Requisitos de metadatos cargados:', this.metadataRequirements);
+      console.log('Metadata requirements loaded:', this.metadataRequirements);
     } catch (error) {
       console.error('Error loading metadata requirements:', error);
       this.metadataRequirements = [];
       if (error instanceof Error) {
-        alert(`Error al cargar los requisitos de metadatos: ${error.message}`);
+        alert(`Error loading metadata requirements: ${error.message}`);
       } else {
-        alert('Error al cargar los requisitos de metadatos. Verifique la conexión con el backend.');
+        alert('Error loading metadata requirements. Please check backend connection.');
       }
     } finally {
       this.loading = false;
@@ -207,10 +200,10 @@ export class MetadataRequirementsComponent implements OnInit {
     try {
       await this.dataService.createMetadataRequirement(requirementData);
       await this.loadMetadataRequirements();
-      alert('Requisito de metadatos creado exitosamente');
+      alert('Metadata requirement created successfully');
     } catch (error) {
       console.error('Error creating metadata requirement:', error);
-      alert('Error al crear el requisito de metadatos');
+      alert('Error creating metadata requirement');
     }
   }
 
@@ -218,10 +211,10 @@ export class MetadataRequirementsComponent implements OnInit {
     try {
       await this.dataService.updateMetadataRequirement(event.id, event.data);
       await this.loadMetadataRequirements();
-      alert('Requisito de metadatos actualizado exitosamente');
+      alert('Metadata requirement updated successfully');
     } catch (error) {
       console.error('Error updating metadata requirement:', error);
-      alert('Error al actualizar el requisito de metadatos');
+      alert('Error updating metadata requirement');
     }
   }
 
@@ -229,20 +222,20 @@ export class MetadataRequirementsComponent implements OnInit {
     try {
       await this.dataService.deleteMetadataRequirement(id);
       await this.loadMetadataRequirements();
-      alert('Requisito de metadatos eliminado exitosamente');
+      alert('Metadata requirement deleted successfully');
     } catch (error) {
       console.error('Error deleting metadata requirement:', error);
-      alert('Error al eliminar el requisito de metadatos');
+      alert('Error deleting metadata requirement');
     }
   }
 
   onExportMetadataRequirements() {
     try {
       const csvContent = this.generateCSV(this.metadataRequirements);
-      this.downloadCSV(csvContent, 'requisitos-metadatos.csv');
+      this.downloadCSV(csvContent, 'metadata-requirements.csv');
     } catch (error) {
       console.error('Error exporting metadata requirements:', error);
-      alert('Error al exportar los requisitos de metadatos');
+      alert('Error exporting metadata requirements');
     }
   }
 

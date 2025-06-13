@@ -31,17 +31,17 @@ export interface MenuItem {
           </div>
         </div>
         
-        <!-- Botón de colapso (desktop) -->
+        <!-- Collapse button (desktop) -->
         <button 
           class="collapse-button"
           (click)="toggleCollapse()"
-          [attr.aria-label]="isCollapsed ? 'Expandir menú' : 'Contraer menú'"
+          [attr.aria-label]="isCollapsed ? 'Expand menu' : 'Collapse menu'"
         >
           <span class="icon">{{ isCollapsed ? '→' : '←' }}</span>
         </button>
       </div>
 
-      <!-- Navegación -->
+      <!-- Navigation -->
       <nav class="sidebar-nav">
         <ul class="nav-list">
           <li 
@@ -65,7 +65,7 @@ export interface MenuItem {
         </ul>
       </nav>
 
-      <!-- Footer del Sidebar -->
+      <!-- Sidebar Footer -->
       <div class="sidebar-footer" *ngIf="!isCollapsed">
         <div class="footer-info">
           <p class="version">v1.0.0</p>
@@ -74,7 +74,7 @@ export interface MenuItem {
       </div>
     </aside>
 
-    <!-- Overlay para móvil -->
+    <!-- Mobile overlay -->
     <div 
       class="sidebar-overlay" 
       *ngIf="isMobileOpen"
@@ -94,61 +94,61 @@ export class SidebarComponent {
       path: '/dashboard',
       label: 'Dashboard',
       icon: '📊',
-      description: 'Vista general del sistema'
+      description: 'System overview'
     },
     {
       path: '/audiences',
-      label: 'Audiencias',
+      label: 'Audiences',
       icon: '👥',
-      description: 'Gestión de audiencias predictivas'
+      description: 'Predictive audience management'
     },
     {
       path: '/destinations',
-      label: 'Destinos',
+      label: 'Destinations',
       icon: '🎯',
-      description: 'Plataformas de entrega'
+      description: 'Delivery platforms'
     },
     {
       path: '/bridges',
-      label: 'Puentes de Datos',
+      label: 'Data Bridges',
       icon: '🌉',
-      description: 'Transformación de identificadores'
+      description: 'Identifier transformation'
     },
     {
       path: '/tenants',
-      label: 'Inquilinos',
+      label: 'Tenants',
       icon: '🏢',
-      description: 'Gestión de clientes'
+      description: 'Client management'
     },
     {
       path: '/concept-groups',
-      label: 'Grupos de Conceptos',
+      label: 'Concept Groups',
       icon: '🏥',
-      description: 'Categorías médicas'
+      description: 'Medical categories'
     },
     {
       path: '/onboarding-requirements',
-      label: 'Requisitos de Incorporación',
+      label: 'Onboarding Requirements',
       icon: '📋',
-      description: 'Configuración de nuevos destinos'
+      description: 'New destination configuration'
     },
     {
       path: '/metadata-requirements',
-      label: 'Requisitos de Metadatos',
+      label: 'Metadata Requirements',
       icon: '📄',
-      description: 'Especificaciones de archivos'
+      description: 'File specifications'
     },
     {
       path: '/external-buckets',
-      label: 'Buckets Externos',
+      label: 'External Buckets',
       icon: '🪣',
-      description: 'Almacenamiento de clientes'
+      description: 'Client storage'
     },
     {
       path: '/delivery-logs',
-      label: 'Logs de Entrega',
+      label: 'Delivery Logs',
       icon: '📈',
-      description: 'Historial de entregas'
+      description: 'Delivery history'
     }
   ];
 
@@ -165,7 +165,7 @@ export class SidebarComponent {
   }
 
   onNavigate(item: MenuItem): void {
-    // Cerrar menú móvil al navegar
+    // Close mobile menu when navigating
     if (this.isMobileOpen) {
       this.closeMobile();
     }

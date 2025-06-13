@@ -39,9 +39,9 @@ export interface CrudConfig {
         <div class="header-left">
           <h2 class="entity-title">{{ config.entityName }}</h2>
           <div class="entity-stats">
-            <span class="total-count">{{ totalItems }} registros</span>
+            <span class="total-count">{{ totalItems }} records</span>
             <span class="filtered-count" *ngIf="filteredItems !== totalItems">
-              ({{ filteredItems }} filtrados)
+              ({{ filteredItems }} filtered)
             </span>
           </div>
         </div>
@@ -53,7 +53,7 @@ export interface CrudConfig {
             (click)="exportData()"
             [disabled]="loading"
           >
-            📊 Exportar
+            📊 Export
           </button>
           
           <button 
@@ -62,7 +62,7 @@ export interface CrudConfig {
             (click)="openCreateModal()"
             [disabled]="loading"
           >
-            ➕ Crear {{ config.entityName }}
+            ➕ Create {{ config.entityName }}
           </button>
         </div>
       </div>
@@ -73,7 +73,7 @@ export interface CrudConfig {
           <div class="search-box">
             <input
               type="text"
-              placeholder="Buscar..."
+              placeholder="Search..."
               [(ngModel)]="searchTerm"
               (input)="onSearch()"
               class="search-input"
@@ -88,7 +88,7 @@ export interface CrudConfig {
               (change)="onFilter()"
               class="filter-select"
             >
-              <option value="">Todos {{ column.label }}</option>
+              <option value="">All {{ column.label }}</option>
               <option 
                 *ngFor="let option of column.options" 
                 [value]="option.value"
@@ -103,14 +103,14 @@ export interface CrudConfig {
             (click)="clearFilters()"
             *ngIf="hasActiveFilters"
           >
-            🗑️ Limpiar Filtros
+            🗑️ Clear Filters
           </button>
         </div>
       </div>
 
       <!-- Loading State -->
       <div class="loading-overlay" *ngIf="loading">
-        <div class="loading-spinner">⏳ Cargando...</div>
+        <div class="loading-spinner">⏳ Loading...</div>
       </div>
 
       <!-- Data Table -->
@@ -131,7 +131,7 @@ export interface CrudConfig {
                   {{ sortDirection === 'asc' ? '↑' : '↓' }}
                 </span>
               </th>
-              <th class="actions-column">Acciones</th>
+              <th class="actions-column">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -155,7 +155,7 @@ export interface CrudConfig {
                     *ngIf="config.actions.read"
                     class="btn-icon btn-view"
                     (click)="viewItem(item)"
-                    title="Ver detalles"
+                    title="View details"
                   >
                     👁️
                   </button>
@@ -163,7 +163,7 @@ export interface CrudConfig {
                     *ngIf="config.actions.update"
                     class="btn-icon btn-edit"
                     (click)="editItem(item)"
-                    title="Editar"
+                    title="Edit"
                   >
                     ✏️
                   </button>
@@ -171,7 +171,7 @@ export interface CrudConfig {
                     *ngIf="config.actions.delete"
                     class="btn-icon btn-delete"
                     (click)="deleteItem(item)"
-                    title="Eliminar"
+                    title="Delete"
                   >
                     🗑️
                   </button>
@@ -184,14 +184,14 @@ export interface CrudConfig {
         <!-- Empty State -->
         <div class="empty-state" *ngIf="paginatedData.length === 0">
           <div class="empty-icon">📭</div>
-          <h3>No hay datos disponibles</h3>
-          <p>{{ hasActiveFilters ? 'No se encontraron resultados con los filtros aplicados' : 'Aún no hay registros creados' }}</p>
+          <h3>No data available</h3>
+          <p>{{ hasActiveFilters ? 'No results found with applied filters' : 'No records created yet' }}</p>
           <button 
             *ngIf="config.actions.create && !hasActiveFilters"
             class="btn btn-primary"
             (click)="openCreateModal()"
           >
-            Crear primer {{ config.entityName }}
+            Create first {{ config.entityName }}
           </button>
         </div>
       </div>
@@ -199,7 +199,7 @@ export interface CrudConfig {
       <!-- Pagination -->
       <div class="crud-pagination" *ngIf="totalPages > 1">
         <div class="pagination-info">
-          Mostrando {{ startIndex + 1 }}-{{ endIndex }} de {{ filteredItems }} registros
+          Showing {{ startIndex + 1 }}-{{ endIndex }} of {{ filteredItems }} records
         </div>
         
         <div class="pagination-controls">
@@ -208,7 +208,7 @@ export interface CrudConfig {
             (click)="goToPage(currentPage - 1)"
             [disabled]="currentPage === 1"
           >
-            ← Anterior
+            ← Previous
           </button>
           
           <span class="page-numbers">
@@ -228,18 +228,18 @@ export interface CrudConfig {
             (click)="goToPage(currentPage + 1)"
             [disabled]="currentPage === totalPages"
           >
-            Siguiente →
+            Next →
           </button>
         </div>
 
         <div class="page-size-selector">
-          <label>Mostrar:</label>
+          <label>Show:</label>
           <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
             <option *ngFor="let size of config.pagination.pageSizeOptions" [value]="size">
               {{ size }}
             </option>
           </select>
-          <span>por página</span>
+          <span>per page</span>
         </div>
       </div>
     </div>
@@ -248,7 +248,7 @@ export interface CrudConfig {
     <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
       <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h3>{{ modalMode === 'create' ? 'Crear' : 'Editar' }} {{ config.entityName }}</h3>
+          <h3>{{ modalMode === 'create' ? 'Create' : 'Edit' }} {{ config.entityName }}</h3>
           <button class="modal-close" (click)="closeModal()">✕</button>
         </div>
         
@@ -294,7 +294,7 @@ export interface CrudConfig {
                   [formControlName]="column.key"
                   class="form-select"
                 >
-                  <option value="">Seleccionar...</option>
+                  <option value="">Select...</option>
                   <option 
                     *ngFor="let option of column.options"
                     [value]="option.value"
@@ -321,7 +321,7 @@ export interface CrudConfig {
                 *ngIf="entityForm.get(column.key)?.errors && entityForm.get(column.key)?.touched"
                 class="field-error"
               >
-                Campo requerido
+                Required field
               </div>
             </div>
           </div>
@@ -333,7 +333,7 @@ export interface CrudConfig {
             class="btn btn-outline"
             (click)="closeModal()"
           >
-            Cancelar
+            Cancel
           </button>
           <button 
             type="submit"
@@ -341,7 +341,7 @@ export interface CrudConfig {
             (click)="onSubmit()"
             [disabled]="entityForm.invalid || submitting"
           >
-            {{ submitting ? 'Guardando...' : (modalMode === 'create' ? 'Crear' : 'Actualizar') }}
+            {{ submitting ? 'Saving...' : (modalMode === 'create' ? 'Create' : 'Update') }}
           </button>
         </div>
       </div>
@@ -536,7 +536,7 @@ export class CrudBaseComponent implements OnInit {
   }
 
   deleteItem(item: any) {
-    if (confirm(`¿Está seguro de eliminar este ${this.config.entityName}?`)) {
+    if (confirm(`Are you sure you want to delete this ${this.config.entityName}?`)) {
       this.delete.emit(item.id);
     }
   }

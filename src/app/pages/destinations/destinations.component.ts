@@ -157,11 +157,11 @@ export class DestinationsComponent implements OnInit {
   analyticsDestinations = 0;
 
   crudConfig: CrudConfig = {
-    entityName: 'Destino',
+    entityName: 'Destination',
     columns: [
       {
         key: 'name',
-        label: 'Nombre',
+        label: 'Name',
         type: 'text',
         sortable: true,
         filterable: false,
@@ -169,7 +169,7 @@ export class DestinationsComponent implements OnInit {
       },
       {
         key: 'platform',
-        label: 'Plataforma',
+        label: 'Platform',
         type: 'select',
         sortable: true,
         filterable: true,
@@ -188,7 +188,7 @@ export class DestinationsComponent implements OnInit {
       },
       {
         key: 'requiredHeaders',
-        label: 'Headers Requeridos',
+        label: 'Required Headers',
         type: 'text',
         sortable: false,
         filterable: false,
@@ -196,7 +196,7 @@ export class DestinationsComponent implements OnInit {
       },
       {
         key: 'dvTokens',
-        label: 'Tokens DV',
+        label: 'DV Tokens',
         type: 'text',
         sortable: false,
         filterable: false,
@@ -204,7 +204,7 @@ export class DestinationsComponent implements OnInit {
       },
       {
         key: 'fileFormatRequirements',
-        label: 'Requisitos de Formato',
+        label: 'File Format Requirements',
         type: 'text',
         sortable: false,
         filterable: false,
@@ -212,7 +212,7 @@ export class DestinationsComponent implements OnInit {
       },
       {
         key: 'active',
-        label: 'Activo',
+        label: 'Active',
         type: 'boolean',
         sortable: true,
         filterable: true,
@@ -260,14 +260,14 @@ export class DestinationsComponent implements OnInit {
     try {
       const result = await this.dataService.getDestinations();
       this.destinations = result || [];
-      console.log('Destinos cargados:', this.destinations);
+      console.log('Destinations loaded:', this.destinations);
     } catch (error) {
       console.error('Error loading destinations:', error);
       this.destinations = [];
       if (error instanceof Error) {
-        alert(`Error al cargar los destinos: ${error.message}`);
+        alert(`Error loading destinations: ${error.message}`);
       } else {
-        alert('Error al cargar los destinos. Verifique la conexión con el backend.');
+        alert('Error loading destinations. Please check backend connection.');
       }
     } finally {
       this.loading = false;
@@ -278,10 +278,10 @@ export class DestinationsComponent implements OnInit {
     try {
       await this.dataService.createDestination(destinationData);
       await this.loadDestinations();
-      alert('Destino creado exitosamente');
+      alert('Destination created successfully');
     } catch (error) {
       console.error('Error creating destination:', error);
-      alert('Error al crear el destino');
+      alert('Error creating destination');
     }
   }
 
@@ -289,10 +289,10 @@ export class DestinationsComponent implements OnInit {
     try {
       await this.dataService.updateDestination(event.id, event.data);
       await this.loadDestinations();
-      alert('Destino actualizado exitosamente');
+      alert('Destination updated successfully');
     } catch (error) {
       console.error('Error updating destination:', error);
-      alert('Error al actualizar el destino');
+      alert('Error updating destination');
     }
   }
 
@@ -300,20 +300,20 @@ export class DestinationsComponent implements OnInit {
     try {
       await this.dataService.deleteDestination(id);
       await this.loadDestinations();
-      alert('Destino eliminado exitosamente');
+      alert('Destination deleted successfully');
     } catch (error) {
       console.error('Error deleting destination:', error);
-      alert('Error al eliminar el destino');
+      alert('Error deleting destination');
     }
   }
 
   onExportDestinations() {
     try {
       const csvContent = this.generateCSV(this.destinations);
-      this.downloadCSV(csvContent, 'destinos.csv');
+      this.downloadCSV(csvContent, 'destinations.csv');
     } catch (error) {
       console.error('Error exporting destinations:', error);
-      alert('Error al exportar los destinos');
+      alert('Error exporting destinations');
     }
   }
 

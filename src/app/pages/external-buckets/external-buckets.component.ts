@@ -10,13 +10,13 @@ import { CrudBaseComponent, CrudConfig } from '../../shared/components/crud-base
   template: `
     <div class="page-container">
       <div class="page-header">
-        <h1>Buckets Externos</h1>
+        <h1>External Buckets</h1>
         <p class="page-description">
-          Gestiona ubicaciones de almacenamiento externo para clientes
+          Manage external storage locations for clients
         </p>
       </div>
 
-      <div class="stats-grid">
+              <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-value">15</div>
           <div class="stat-label">Total Buckets</div>
@@ -33,13 +33,6 @@ import { CrudBaseComponent, CrudConfig } from '../../shared/components/crud-base
           <div class="stat-value">2</div>
           <div class="stat-label">SFTP Servers</div>
         </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <h2>Próximamente</h2>
-        </div>
-        <p>La interfaz CRUD completa estará disponible en la siguiente fase del desarrollo.</p>
       </div>
 
       <app-crud-base
@@ -134,11 +127,11 @@ export class ExternalBucketsComponent implements OnInit {
   loading = false;
 
   crudConfig: CrudConfig = {
-    entityName: 'Bucket Externo',
+    entityName: 'External Bucket',
     columns: [
       {
         key: 'bucketName',
-        label: 'Nombre del Bucket',
+        label: 'Bucket Name',
         type: 'text',
         sortable: true,
         filterable: false,
@@ -146,7 +139,7 @@ export class ExternalBucketsComponent implements OnInit {
       },
       {
         key: 'tenantId',
-        label: 'ID Inquilino',
+        label: 'Tenant ID',
         type: 'text',
         sortable: true,
         filterable: false,
@@ -154,7 +147,7 @@ export class ExternalBucketsComponent implements OnInit {
       },
       {
         key: 'url1',
-        label: 'URL Principal',
+        label: 'Primary URL',
         type: 'text',
         sortable: false,
         filterable: false,
@@ -162,7 +155,7 @@ export class ExternalBucketsComponent implements OnInit {
       },
       {
         key: 'url2',
-        label: 'URL Secundaria',
+        label: 'Secondary URL',
         type: 'text',
         sortable: false,
         filterable: false,
@@ -170,7 +163,7 @@ export class ExternalBucketsComponent implements OnInit {
       },
       {
         key: 'active',
-        label: 'Activo',
+        label: 'Active',
         type: 'boolean',
         sortable: true,
         filterable: true,
@@ -201,14 +194,14 @@ export class ExternalBucketsComponent implements OnInit {
     try {
       const result = await this.dataService.getExternalBuckets();
       this.externalBuckets = result || [];
-      console.log('Buckets externos cargados:', this.externalBuckets);
+      console.log('External buckets loaded:', this.externalBuckets);
     } catch (error) {
       console.error('Error loading external buckets:', error);
       this.externalBuckets = [];
       if (error instanceof Error) {
-        alert(`Error al cargar los buckets externos: ${error.message}`);
+        alert(`Error loading external buckets: ${error.message}`);
       } else {
-        alert('Error al cargar los buckets externos. Verifique la conexión con el backend.');
+        alert('Error loading external buckets. Please check backend connection.');
       }
     } finally {
       this.loading = false;
@@ -219,10 +212,10 @@ export class ExternalBucketsComponent implements OnInit {
     try {
       await this.dataService.createExternalBucket(bucketData);
       await this.loadExternalBuckets();
-      alert('Bucket externo creado exitosamente');
+      alert('External bucket created successfully');
     } catch (error) {
       console.error('Error creating external bucket:', error);
-      alert('Error al crear el bucket externo');
+      alert('Error creating external bucket');
     }
   }
 
@@ -230,10 +223,10 @@ export class ExternalBucketsComponent implements OnInit {
     try {
       await this.dataService.updateExternalBucket(event.id, event.data);
       await this.loadExternalBuckets();
-      alert('Bucket externo actualizado exitosamente');
+      alert('External bucket updated successfully');
     } catch (error) {
       console.error('Error updating external bucket:', error);
-      alert('Error al actualizar el bucket externo');
+      alert('Error updating external bucket');
     }
   }
 
@@ -241,20 +234,20 @@ export class ExternalBucketsComponent implements OnInit {
     try {
       await this.dataService.deleteExternalBucket(id);
       await this.loadExternalBuckets();
-      alert('Bucket externo eliminado exitosamente');
+      alert('External bucket deleted successfully');
     } catch (error) {
       console.error('Error deleting external bucket:', error);
-      alert('Error al eliminar el bucket externo');
+      alert('Error deleting external bucket');
     }
   }
 
   onExportExternalBuckets() {
     try {
       const csvContent = this.generateCSV(this.externalBuckets);
-      this.downloadCSV(csvContent, 'buckets-externos.csv');
+      this.downloadCSV(csvContent, 'external-buckets.csv');
     } catch (error) {
       console.error('Error exporting external buckets:', error);
-      alert('Error al exportar los buckets externos');
+      alert('Error exporting external buckets');
     }
   }
 

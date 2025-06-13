@@ -157,11 +157,11 @@ export class BridgesComponent implements OnInit {
   loading = false;
 
   crudConfig: CrudConfig = {
-    entityName: 'Puente de Datos',
+    entityName: 'Data Bridge',
     columns: [
       {
         key: 'patientId',
-        label: 'ID Paciente',
+        label: 'Patient ID',
         type: 'text',
         sortable: true,
         filterable: false,
@@ -169,7 +169,7 @@ export class BridgesComponent implements OnInit {
       },
       {
         key: 'customId',
-        label: 'ID Personalizado',
+        label: 'Custom ID',
         type: 'text',
         sortable: true,
         filterable: false,
@@ -177,7 +177,7 @@ export class BridgesComponent implements OnInit {
       },
       {
         key: 'idType',
-        label: 'Tipo de ID',
+        label: 'ID Type',
         type: 'select',
         sortable: true,
         filterable: true,
@@ -190,7 +190,7 @@ export class BridgesComponent implements OnInit {
       },
       {
         key: 'destinationId',
-        label: 'ID Destino',
+        label: 'Destination ID',
         type: 'text',
         sortable: true,
         filterable: false,
@@ -221,19 +221,19 @@ export class BridgesComponent implements OnInit {
     try {
       const result = await this.dataService.getBridges();
       this.bridges = result || [];
-      console.log('Puentes de datos cargados:', this.bridges);
-      this.totalBridges = this.bridges.length;
-      this.throtleIds = this.bridges.filter((b: any) => b.idType === 'THROTLE_ID').length;
-      this.datavantTokens = this.bridges.filter((b: any) => b.idType === 'DATAVANT_TOKEN').length;
-      this.purpleIds = this.bridges.filter((b: any) => b.idType === 'PURPLE_ID').length;
-    } catch (error) {
-      console.error('Error loading bridges:', error);
-      this.bridges = [];
-      if (error instanceof Error) {
-        alert(`Error al cargar los puentes de datos: ${error.message}`);
-      } else {
-        alert('Error al cargar los puentes de datos. Verifique la conexión con el backend.');
-      }
+            console.log('Data bridges loaded:', this.bridges);
+       this.totalBridges = this.bridges.length;
+       this.throtleIds = this.bridges.filter((b: any) => b.idType === 'THROTLE_ID').length;
+       this.datavantTokens = this.bridges.filter((b: any) => b.idType === 'DATAVANT_TOKEN').length;
+       this.purpleIds = this.bridges.filter((b: any) => b.idType === 'PURPLE_ID').length;
+     } catch (error) {
+       console.error('Error loading bridges:', error);
+       this.bridges = [];
+       if (error instanceof Error) {
+         alert(`Error loading data bridges: ${error.message}`);
+       } else {
+         alert('Error loading data bridges. Please check backend connection.');
+       }
     } finally {
       this.loading = false;
     }
@@ -243,10 +243,10 @@ export class BridgesComponent implements OnInit {
     try {
       await this.dataService.createBridge(bridgeData);
       await this.loadBridges();
-      alert('Puente de datos creado exitosamente');
+      alert('Data bridge created successfully');
     } catch (error) {
       console.error('Error creating bridge:', error);
-      alert('Error al crear el puente de datos');
+      alert('Error creating data bridge');
     }
   }
 
@@ -254,10 +254,10 @@ export class BridgesComponent implements OnInit {
     try {
       await this.dataService.updateBridge(event.id, event.data);
       await this.loadBridges();
-      alert('Puente de datos actualizado exitosamente');
+      alert('Data bridge updated successfully');
     } catch (error) {
       console.error('Error updating bridge:', error);
-      alert('Error al actualizar el puente de datos');
+      alert('Error updating data bridge');
     }
   }
 
@@ -265,20 +265,20 @@ export class BridgesComponent implements OnInit {
     try {
       await this.dataService.deleteBridge(id);
       await this.loadBridges();
-      alert('Puente de datos eliminado exitosamente');
+      alert('Data bridge deleted successfully');
     } catch (error) {
       console.error('Error deleting bridge:', error);
-      alert('Error al eliminar el puente de datos');
+      alert('Error deleting data bridge');
     }
   }
 
   onExportBridges() {
     try {
       const csvContent = this.generateCSV(this.bridges);
-      this.downloadCSV(csvContent, 'puentes-datos.csv');
+      this.downloadCSV(csvContent, 'data-bridges.csv');
     } catch (error) {
       console.error('Error exporting bridges:', error);
-      alert('Error al exportar los puentes de datos');
+      alert('Error exporting data bridges');
     }
   }
 

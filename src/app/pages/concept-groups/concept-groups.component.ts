@@ -157,11 +157,11 @@ export class ConceptGroupsComponent implements OnInit {
   loading = false;
 
   crudConfig: CrudConfig = {
-    entityName: 'Grupo de Conceptos',
+    entityName: 'Concept Group',
     columns: [
       {
         key: 'groupName',
-        label: 'Nombre del Grupo',
+        label: 'Group Name',
         type: 'text',
         sortable: true,
         filterable: false,
@@ -169,27 +169,27 @@ export class ConceptGroupsComponent implements OnInit {
       },
       {
         key: 'medicalCategory',
-        label: 'Categoría Médica',
+        label: 'Medical Category',
         type: 'select',
         sortable: true,
         filterable: true,
         required: true,
         options: [
-          { value: 'Endocrinology', label: 'Endocrinología' },
-          { value: 'Cardiology', label: 'Cardiología' },
-          { value: 'Oncology', label: 'Oncología' },
-          { value: 'Neurology', label: 'Neurología' },
-          { value: 'Immunology', label: 'Inmunología' },
-          { value: 'Dermatology', label: 'Dermatología' },
-          { value: 'Psychiatry', label: 'Psiquiatría' },
-          { value: 'Gastroenterology', label: 'Gastroenterología' },
-          { value: 'Rheumatology', label: 'Reumatología' },
-          { value: 'Hematology', label: 'Hematología' }
+          { value: 'Endocrinology', label: 'Endocrinology' },
+          { value: 'Cardiology', label: 'Cardiology' },
+          { value: 'Oncology', label: 'Oncology' },
+          { value: 'Neurology', label: 'Neurology' },
+          { value: 'Immunology', label: 'Immunology' },
+          { value: 'Dermatology', label: 'Dermatology' },
+          { value: 'Psychiatry', label: 'Psychiatry' },
+          { value: 'Gastroenterology', label: 'Gastroenterology' },
+          { value: 'Rheumatology', label: 'Rheumatology' },
+          { value: 'Hematology', label: 'Hematology' }
         ]
       },
       {
         key: 'description',
-        label: 'Descripción',
+        label: 'Description',
         type: 'text',
         sortable: false,
         filterable: false,
@@ -197,7 +197,7 @@ export class ConceptGroupsComponent implements OnInit {
       },
       {
         key: 'active',
-        label: 'Activo',
+        label: 'Active',
         type: 'boolean',
         sortable: true,
         filterable: true,
@@ -248,14 +248,14 @@ export class ConceptGroupsComponent implements OnInit {
     try {
       const result = await this.dataService.getConceptGroups();
       this.conceptGroups = result || [];
-      console.log('Grupos de conceptos cargados:', this.conceptGroups);
+      console.log('Concept groups loaded:', this.conceptGroups);
     } catch (error) {
       console.error('Error loading concept groups:', error);
       this.conceptGroups = [];
       if (error instanceof Error) {
-        alert(`Error al cargar los grupos de conceptos: ${error.message}`);
+        alert(`Error loading concept groups: ${error.message}`);
       } else {
-        alert('Error al cargar los grupos de conceptos. Verifique la conexión con el backend.');
+        alert('Error loading concept groups. Please check backend connection.');
       }
     } finally {
       this.loading = false;
@@ -266,10 +266,10 @@ export class ConceptGroupsComponent implements OnInit {
     try {
       await this.dataService.createConceptGroup(conceptGroupData);
       await this.loadConceptGroups();
-      alert('Grupo de conceptos creado exitosamente');
+      alert('Concept group created successfully');
     } catch (error) {
       console.error('Error creating concept group:', error);
-      alert('Error al crear el grupo de conceptos');
+      alert('Error creating concept group');
     }
   }
 
@@ -277,10 +277,10 @@ export class ConceptGroupsComponent implements OnInit {
     try {
       await this.dataService.updateConceptGroup(event.id, event.data);
       await this.loadConceptGroups();
-      alert('Grupo de conceptos actualizado exitosamente');
+      alert('Concept group updated successfully');
     } catch (error) {
       console.error('Error updating concept group:', error);
-      alert('Error al actualizar el grupo de conceptos');
+      alert('Error updating concept group');
     }
   }
 
@@ -288,20 +288,20 @@ export class ConceptGroupsComponent implements OnInit {
     try {
       await this.dataService.deleteConceptGroup(id);
       await this.loadConceptGroups();
-      alert('Grupo de conceptos eliminado exitosamente');
+      alert('Concept group deleted successfully');
     } catch (error) {
       console.error('Error deleting concept group:', error);
-      alert('Error al eliminar el grupo de conceptos');
+      alert('Error deleting concept group');
     }
   }
 
   onExportConceptGroups() {
     try {
       const csvContent = this.generateCSV(this.conceptGroups);
-      this.downloadCSV(csvContent, 'grupos-conceptos.csv');
+      this.downloadCSV(csvContent, 'concept-groups.csv');
     } catch (error) {
       console.error('Error exporting concept groups:', error);
-      alert('Error al exportar los grupos de conceptos');
+      alert('Error exporting concept groups');
     }
   }
 

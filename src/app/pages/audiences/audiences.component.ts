@@ -33,11 +33,11 @@ export class AudiencesComponent implements OnInit {
   loading = false;
 
   crudConfig: CrudConfig = {
-    entityName: 'Audiencia',
+    entityName: 'Audience',
     columns: [
       {
         key: 'pathName',
-        label: 'Ruta',
+        label: 'Path',
         type: 'text',
         sortable: true,
         filterable: false,
@@ -45,7 +45,7 @@ export class AudiencesComponent implements OnInit {
       },
       {
         key: 'audienceType',
-        label: 'Tipo',
+        label: 'Type',
         type: 'select',
         sortable: true,
         filterable: true,
@@ -58,7 +58,7 @@ export class AudiencesComponent implements OnInit {
       },
       {
         key: 'destinationName',
-        label: 'Destino',
+        label: 'Destination',
         type: 'select',
         sortable: true,
         filterable: true,
@@ -77,7 +77,7 @@ export class AudiencesComponent implements OnInit {
       },
       {
         key: 'minSize',
-        label: 'Tamaño Mín.',
+        label: 'Min Size',
         type: 'number',
         sortable: true,
         filterable: false,
@@ -85,7 +85,7 @@ export class AudiencesComponent implements OnInit {
       },
       {
         key: 'maxSize',
-        label: 'Tamaño Máx.',
+        label: 'Max Size',
         type: 'number',
         sortable: true,
         filterable: false,
@@ -93,21 +93,21 @@ export class AudiencesComponent implements OnInit {
       },
       {
         key: 'cadence',
-        label: 'Frecuencia',
+        label: 'Frequency',
         type: 'select',
         sortable: true,
         filterable: true,
         required: true,
         options: [
-          { value: 'daily', label: 'Diaria' },
-          { value: 'weekly', label: 'Semanal' },
-          { value: 'monthly', label: 'Mensual' },
-          { value: 'quarterly', label: 'Trimestral' }
+          { value: 'daily', label: 'Daily' },
+          { value: 'weekly', label: 'Weekly' },
+          { value: 'monthly', label: 'Monthly' },
+          { value: 'quarterly', label: 'Quarterly' }
         ]
       },
       {
         key: 'active',
-        label: 'Activa',
+        label: 'Active',
         type: 'boolean',
         sortable: true,
         filterable: true,
@@ -138,15 +138,15 @@ export class AudiencesComponent implements OnInit {
     try {
       const result = await this.dataService.getAudiences();
       this.audiences = result || [];
-      console.log('Audiencias cargadas:', this.audiences);
+      console.log('Audiences loaded:', this.audiences);
     } catch (error) {
       console.error('Error loading audiences:', error);
       this.audiences = [];
-      // Mostrar error más específico
+      // Show more specific error
       if (error instanceof Error) {
-        alert(`Error al cargar las audiencias: ${error.message}`);
+        alert(`Error loading audiences: ${error.message}`);
       } else {
-        alert('Error al cargar las audiencias. Verifique la conexión con el backend.');
+        alert('Error loading audiences. Please check backend connection.');
       }
     } finally {
       this.loading = false;
@@ -157,10 +157,10 @@ export class AudiencesComponent implements OnInit {
     try {
       await this.dataService.createAudience(audienceData);
       await this.loadAudiences();
-      alert('Audiencia creada exitosamente');
+      alert('Audience created successfully');
     } catch (error) {
       console.error('Error creating audience:', error);
-      alert('Error al crear la audiencia');
+      alert('Error creating audience');
     }
   }
 
@@ -168,10 +168,10 @@ export class AudiencesComponent implements OnInit {
     try {
       await this.dataService.updateAudience(event.id, event.data);
       await this.loadAudiences();
-      alert('Audiencia actualizada exitosamente');
+      alert('Audience updated successfully');
     } catch (error) {
       console.error('Error updating audience:', error);
-      alert('Error al actualizar la audiencia');
+      alert('Error updating audience');
     }
   }
 
@@ -179,20 +179,20 @@ export class AudiencesComponent implements OnInit {
     try {
       await this.dataService.deleteAudience(id);
       await this.loadAudiences();
-      alert('Audiencia eliminada exitosamente');
+      alert('Audience deleted successfully');
     } catch (error) {
       console.error('Error deleting audience:', error);
-      alert('Error al eliminar la audiencia');
+      alert('Error deleting audience');
     }
   }
 
   onExportAudiences() {
     try {
       const csvContent = this.generateCSV(this.audiences);
-      this.downloadCSV(csvContent, 'audiencias.csv');
+      this.downloadCSV(csvContent, 'audiences.csv');
     } catch (error) {
       console.error('Error exporting audiences:', error);
-      alert('Error al exportar las audiencias');
+      alert('Error exporting audiences');
     }
   }
 

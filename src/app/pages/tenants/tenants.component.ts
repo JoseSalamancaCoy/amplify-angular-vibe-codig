@@ -157,11 +157,11 @@ export class TenantsComponent implements OnInit {
   dspClients = 0;
 
   crudConfig: CrudConfig = {
-    entityName: 'Inquilino',
+    entityName: 'Tenant',
     columns: [
       {
         key: 'name',
-        label: 'Nombre',
+        label: 'Name',
         type: 'text',
         sortable: true,
         filterable: false,
@@ -169,7 +169,7 @@ export class TenantsComponent implements OnInit {
       },
       {
         key: 'clientId',
-        label: 'ID Cliente',
+        label: 'Client ID',
         type: 'text',
         sortable: true,
         filterable: false,
@@ -177,7 +177,7 @@ export class TenantsComponent implements OnInit {
       },
       {
         key: 'configurationSettings',
-        label: 'Configuración',
+        label: 'Configuration',
         type: 'text',
         sortable: false,
         filterable: false,
@@ -185,7 +185,7 @@ export class TenantsComponent implements OnInit {
       },
       {
         key: 'active',
-        label: 'Activo',
+        label: 'Active',
         type: 'boolean',
         sortable: true,
         filterable: true,
@@ -227,15 +227,15 @@ export class TenantsComponent implements OnInit {
           t.name?.toLowerCase().includes(dsp)
         )
       ).length;
-      console.log('Inquilinos cargados:', this.tenants);
-    } catch (error) {
-      console.error('Error loading tenants:', error);
-      this.tenants = [];
-      if (error instanceof Error) {
-        alert(`Error al cargar los inquilinos: ${error.message}`);
-      } else {
-        alert('Error al cargar los inquilinos. Verifique la conexión con el backend.');
-      }
+             console.log('Tenants loaded:', this.tenants);
+     } catch (error) {
+       console.error('Error loading tenants:', error);
+       this.tenants = [];
+       if (error instanceof Error) {
+         alert(`Error loading tenants: ${error.message}`);
+       } else {
+         alert('Error loading tenants. Please check backend connection.');
+       }
     } finally {
       this.loading = false;
     }
@@ -245,10 +245,10 @@ export class TenantsComponent implements OnInit {
     try {
       await this.dataService.createTenant(tenantData);
       await this.loadTenants();
-      alert('Inquilino creado exitosamente');
+      alert('Tenant created successfully');
     } catch (error) {
       console.error('Error creating tenant:', error);
-      alert('Error al crear el inquilino');
+      alert('Error creating tenant');
     }
   }
 
@@ -256,10 +256,10 @@ export class TenantsComponent implements OnInit {
     try {
       await this.dataService.updateTenant(event.id, event.data);
       await this.loadTenants();
-      alert('Inquilino actualizado exitosamente');
+      alert('Tenant updated successfully');
     } catch (error) {
       console.error('Error updating tenant:', error);
-      alert('Error al actualizar el inquilino');
+      alert('Error updating tenant');
     }
   }
 
@@ -267,20 +267,20 @@ export class TenantsComponent implements OnInit {
     try {
       await this.dataService.deleteTenant(id);
       await this.loadTenants();
-      alert('Inquilino eliminado exitosamente');
+      alert('Tenant deleted successfully');
     } catch (error) {
       console.error('Error deleting tenant:', error);
-      alert('Error al eliminar el inquilino');
+      alert('Error deleting tenant');
     }
   }
 
   onExportTenants() {
     try {
       const csvContent = this.generateCSV(this.tenants);
-      this.downloadCSV(csvContent, 'inquilinos.csv');
+      this.downloadCSV(csvContent, 'tenants.csv');
     } catch (error) {
       console.error('Error exporting tenants:', error);
-      alert('Error al exportar los inquilinos');
+      alert('Error exporting tenants');
     }
   }
 

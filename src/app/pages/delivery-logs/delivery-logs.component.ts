@@ -9,39 +9,39 @@ import { DataService } from '../../services/data.service';
   template: `
     <div class="page-container">
       <div class="page-header">
-        <h1>Logs de Entrega</h1>
+        <h1>Delivery Logs</h1>
         <p class="page-description">
-          Monitorea el estado y historial de entregas de audiencias
+          Monitor status and history of audience deliveries
         </p>
       </div>
 
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-value">{{ totalLogs }}</div>
-          <div class="stat-label">Total Entregas</div>
+          <div class="stat-label">Total Deliveries</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">{{ successfulLogs }}</div>
-          <div class="stat-label">Exitosas</div>
+          <div class="stat-label">Successful</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">{{ failedLogs }}</div>
-          <div class="stat-label">Fallidas</div>
+          <div class="stat-label">Failed</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">{{ pendingLogs }}</div>
-          <div class="stat-label">Pendientes</div>
+          <div class="stat-label">Pending</div>
         </div>
       </div>
 
       <div class="content-section">
         <div class="section-header">
-          <h2>Próximamente</h2>
+          <h2>Coming Soon</h2>
           <button class="btn-primary" (click)="createSampleLog()">
-            Crear Log Ejemplo
+            Create Sample Log
           </button>
         </div>
-        <p>La interfaz CRUD completa estará disponible en la siguiente fase del desarrollo.</p>
+        <p>Complete CRUD interface will be available in the next development phase.</p>
       </div>
     </div>
   `,
@@ -172,10 +172,10 @@ export class DeliveryLogsComponent implements OnInit {
         errorMessage: undefined
       });
       await this.loadStats();
-      alert('Log de entrega de ejemplo creado exitosamente');
+      alert('Sample delivery log created successfully');
     } catch (error) {
       console.error('Error creating sample delivery log:', error);
-      alert('Error al crear log de entrega de ejemplo');
+      alert('Error creating sample delivery log');
     }
   }
 } 
