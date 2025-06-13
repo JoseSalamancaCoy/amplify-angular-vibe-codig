@@ -1,0 +1,185 @@
+// =============================================================================
+// PURPLELAB DESIGN SYSTEM - VARIABLES
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// COLORES PRIMARIOS
+// -----------------------------------------------------------------------------
+$purple-primary: #79589f;
+$purple-dark: #4f3074;
+$purple-light: #9d70d0;
+
+// -----------------------------------------------------------------------------
+// COLORES SECUNDARIOS
+// -----------------------------------------------------------------------------
+$blue-primary: #006deb;
+$green-success: #008700;
+$orange-warning: #c74c00;
+$red-danger: #de0a0a;
+
+// -----------------------------------------------------------------------------
+// NEUTRALES
+// -----------------------------------------------------------------------------
+$gray-900: #1a1a1a;
+$gray-700: #475366;
+$gray-600: #56667d;
+$gray-500: #62738d;
+$gray-300: #cfd7e6;
+$gray-100: #eef1f6;
+$gray-50: #f7f8fb;
+$white: #ffffff;
+
+// -----------------------------------------------------------------------------
+// COLORES DE ESTADO (BACKGROUNDS)
+// -----------------------------------------------------------------------------
+$info-bg: #f6faff;
+$info-border: #8ebdf1;
+$success-bg: #f8fcf9;
+$success-border: #86cf95;
+$warning-bg: #fffaf6;
+$warning-border: #fa9f47;
+$danger-bg: #fdf6f6;
+$danger-border: #de7575;
+
+// -----------------------------------------------------------------------------
+// TIPOGRAFÍA
+// -----------------------------------------------------------------------------
+$font-family-base: "Salesforce Sans", -apple-system, BlinkMacSystemFont, 
+                   'avenir next', avenir, helvetica, 'helvetica neue', 
+                   ubuntu, roboto, noto, 'segoe ui', arial, sans-serif;
+$font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 
+                   'Droid Sans Mono', 'Source Code Pro', monospace;
+
+// Font sizes
+$font-size-h1: 32px;
+$font-size-h2: 24px;
+$font-size-h3: 20px;
+$font-size-h4: 18px;
+$font-size-h5: 16px;
+$font-size-h6: 14px;
+$font-size-large: 16px;
+$font-size-base: 14px;
+$font-size-small: 13px;
+$font-size-caption: 12px;
+
+// Font weights
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Line heights
+$line-height-tight: 1.2;
+$line-height-medium: 1.3;
+$line-height-normal: 1.4;
+$line-height-relaxed: 1.5;
+$line-height-loose: 1.6;
+
+// -----------------------------------------------------------------------------
+// ESPACIADO (Sistema base 4px)
+// -----------------------------------------------------------------------------
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 48px;
+$spacing-3xl: 64px;
+
+// -----------------------------------------------------------------------------
+// BORDERS Y RADIUS
+// -----------------------------------------------------------------------------
+$border-width: 1px;
+$border-color: $gray-300;
+
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+$border-radius-xl: 16px;
+$border-radius-pill: 9999px;
+
+// -----------------------------------------------------------------------------
+// SHADOWS
+// -----------------------------------------------------------------------------
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.15);
+$shadow-xl: 0 10px 25px rgba(0, 0, 0, 0.3);
+
+// Focus shadows
+$shadow-focus-primary: 0 0 0 2px rgba(157, 112, 208, 0.4);
+$shadow-focus-danger: 0 0 0 2px rgba(229, 143, 143, 0.4);
+$shadow-focus-warning: 0 0 0 2px rgba(251, 197, 149, 0.4);
+$shadow-focus-info: 0 0 0 2px rgba(142, 189, 241, 0.4);
+$shadow-focus-success: 0 0 0 2px rgba(171, 215, 180, 0.4);
+
+// -----------------------------------------------------------------------------
+// BREAKPOINTS
+// -----------------------------------------------------------------------------
+$breakpoint-xs: 0;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// -----------------------------------------------------------------------------
+// GRID SYSTEM
+// -----------------------------------------------------------------------------
+$container-max-width: 1200px;
+$grid-columns: 12;
+$grid-gutter: 24px;
+
+// -----------------------------------------------------------------------------
+// COMPONENT SIZES
+// -----------------------------------------------------------------------------
+
+// Buttons
+$button-height-lg: 40px;
+$button-height-md: 32px;
+$button-height-sm: 26px;
+
+$button-padding-lg: 16px;
+$button-padding-md: 15px;
+$button-padding-sm: 12px;
+
+// Inputs
+$input-height-lg: 44px;
+$input-height-md: 36px;
+$input-height-sm: 32px;
+
+$input-padding-x: 12px;
+$input-padding-y: 8px;
+
+// Cards
+$card-padding: 24px;
+$card-border-radius: $border-radius-md;
+
+// Tables
+$table-cell-padding-x: 16px;
+$table-cell-padding-y: 12px;
+
+// -----------------------------------------------------------------------------
+// Z-INDEX SCALE
+// -----------------------------------------------------------------------------
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;
+
+// -----------------------------------------------------------------------------
+// TRANSITIONS
+// -----------------------------------------------------------------------------
+$transition-fast: 150ms ease-out;
+$transition-base: 250ms ease-out;
+$transition-slow: 350ms ease-out;
+
+$transition-all: all $transition-base;
+$transition-color: color $transition-fast;
+$transition-background: background-color $transition-fast;
+$transition-border: border-color $transition-fast;
+$transition-shadow: box-shadow $transition-fast;
+$transition-transform: transform $transition-fast; 
