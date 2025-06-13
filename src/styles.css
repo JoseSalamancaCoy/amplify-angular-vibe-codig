@@ -3,9 +3,9 @@
    ============================================================================= */
 
 /* Import design system */
-@import './styles/variables.scss';
-@import './styles/mixins.scss';
-@import './styles/components.scss';
+@import './styles/_variables.scss';
+@import './styles/_mixins.scss';
+@import './styles/_components.scss';
 
 /* =============================================================================
    GLOBAL STYLES
