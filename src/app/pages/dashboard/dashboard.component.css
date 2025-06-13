@@ -1,0 +1,217 @@
+/* PurpleLab OTS - Dashboard Page Styles */
+
+:host {
+  --purplelab-primary: #79589f;
+  --purplelab-secondary: #9b7dc7;
+  --purplelab-accent: #5c4084;
+  --purplelab-neutral-100: #f8fafc;
+  --purplelab-neutral-200: #e2e8f0;
+  --purplelab-neutral-600: #64748b;
+  --purplelab-neutral-700: #475569;
+  --purplelab-neutral-800: #334155;
+}
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  margin-bottom: 3rem;
+}
+
+.dashboard-header h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--purplelab-neutral-800);
+  margin: 0 0 0.5rem 0;
+}
+
+.dashboard-header p {
+  color: var(--purplelab-neutral-600);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--purplelab-neutral-200);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(121, 88, 159, 0.15);
+}
+
+.stat-card h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--purplelab-neutral-600);
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--purplelab-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.stat-subtitle {
+  font-size: 0.85rem;
+  color: var(--purplelab-neutral-600);
+  font-style: italic;
+}
+
+/* Demo Section */
+.demo-section {
+  margin: 3rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.demo-card {
+  background: white;
+  border-radius: 16px;
+  padding: 3rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 2px dashed var(--purplelab-neutral-200);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+.demo-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--purplelab-neutral-800);
+  margin: 0 0 1rem 0;
+}
+
+.demo-card p {
+  color: var(--purplelab-neutral-600);
+  font-size: 1rem;
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+}
+
+.demo-button {
+  background: linear-gradient(135deg, var(--purplelab-primary) 0%, var(--purplelab-secondary) 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 8px rgba(121, 88, 159, 0.3);
+}
+
+.demo-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(121, 88, 159, 0.4);
+}
+
+.demo-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Quick Actions */
+.quick-actions {
+  margin: 3rem 0;
+}
+
+.quick-actions h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--purplelab-neutral-800);
+  margin: 0 0 2rem 0;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.action-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--purplelab-neutral-200);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(121, 88, 159, 0.15);
+  border-color: var(--purplelab-primary);
+}
+
+.action-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.action-card h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--purplelab-neutral-800);
+  margin: 0 0 0.5rem 0;
+}
+
+.action-card p {
+  font-size: 0.9rem;
+  color: var(--purplelab-neutral-600);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .demo-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .actions-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .action-card {
+    padding: 1.5rem;
+  }
+} 
