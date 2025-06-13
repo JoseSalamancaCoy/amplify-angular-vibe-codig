@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DataService } from '../../services/data.service';
+import { CrudBaseComponent, CrudConfig } from '../../shared/components/crud-base/crud-base.component';
 
 @Component({
   selector: 'app-external-buckets',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CrudBaseComponent],
   template: `
     <div class="page-container">
       <div class="page-header">
-        <h1>Buckets Externos</h1>
+        <h1>External Buckets</h1>
         <p class="page-description">
-          Gestiona ubicaciones de almacenamiento externo para clientes
+          Manage external storage locations for clients
         </p>
       </div>
 
-      <div class="stats-grid">
+              <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-value">15</div>
           <div class="stat-label">Total Buckets</div>
@@ -33,18 +35,21 @@ import { CommonModule } from '@angular/common';
         </div>
       </div>
 
-      <div class="content-section">
-        <div class="section-header">
-          <h2>Próximamente</h2>
-        </div>
-        <p>La interfaz CRUD completa estará disponible en la siguiente fase del desarrollo.</p>
-      </div>
+      <app-crud-base
+        [config]="crudConfig"
+        [data]="externalBuckets"
+        [loading]="loading"
+        (create)="onCreateExternalBucket($event)"
+        (update)="onUpdateExternalBucket($event)"
+        (delete)="onDeleteExternalBucket($event)"
+        (export)="onExportExternalBuckets()"
+      ></app-crud-base>
     </div>
   `,
   styles: [`
     .page-container {
       padding: 24px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -118,10 +123,159 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class ExternalBucketsComponent implements OnInit {
+  externalBuckets: any[] = [];
+  loading = false;
 
-  constructor() {}
+  crudConfig: CrudConfig = {
+    entityName: 'External Bucket',
+    columns: [
+      {
+        key: 'bucketName',
+        label: 'Bucket Name',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'tenantId',
+        label: 'Tenant ID',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'url1',
+        label: 'Primary URL',
+        type: 'text',
+        sortable: false,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'url2',
+        label: 'Secondary URL',
+        type: 'text',
+        sortable: false,
+        filterable: false,
+        required: false
+      },
+      {
+        key: 'active',
+        label: 'Active',
+        type: 'boolean',
+        sortable: true,
+        filterable: true,
+        required: false
+      }
+    ],
+    actions: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+      export: true
+    },
+    pagination: {
+      pageSize: 10,
+      pageSizeOptions: [5, 10, 25, 50, 100]
+    }
+  };
+
+  constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    // Component initialization
+    this.loadExternalBuckets();
+  }
+
+  async loadExternalBuckets() {
+    this.loading = true;
+    try {
+      const result = await this.dataService.getExternalBuckets();
+      this.externalBuckets = result || [];
+      console.log('External buckets loaded:', this.externalBuckets);
+    } catch (error) {
+      console.error('Error loading external buckets:', error);
+      this.externalBuckets = [];
+      if (error instanceof Error) {
+        alert(`Error loading external buckets: ${error.message}`);
+      } else {
+        alert('Error loading external buckets. Please check backend connection.');
+      }
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async onCreateExternalBucket(bucketData: any) {
+    try {
+      await this.dataService.createExternalBucket(bucketData);
+      await this.loadExternalBuckets();
+      alert('External bucket created successfully');
+    } catch (error) {
+      console.error('Error creating external bucket:', error);
+      alert('Error creating external bucket');
+    }
+  }
+
+  async onUpdateExternalBucket(event: { id: string, data: any }) {
+    try {
+      await this.dataService.updateExternalBucket(event.id, event.data);
+      await this.loadExternalBuckets();
+      alert('External bucket updated successfully');
+    } catch (error) {
+      console.error('Error updating external bucket:', error);
+      alert('Error updating external bucket');
+    }
+  }
+
+  async onDeleteExternalBucket(id: string) {
+    try {
+      await this.dataService.deleteExternalBucket(id);
+      await this.loadExternalBuckets();
+      alert('External bucket deleted successfully');
+    } catch (error) {
+      console.error('Error deleting external bucket:', error);
+      alert('Error deleting external bucket');
+    }
+  }
+
+  onExportExternalBuckets() {
+    try {
+      const csvContent = this.generateCSV(this.externalBuckets);
+      this.downloadCSV(csvContent, 'external-buckets.csv');
+    } catch (error) {
+      console.error('Error exporting external buckets:', error);
+      alert('Error exporting external buckets');
+    }
+  }
+
+  private generateCSV(data: any[]): string {
+    if (data.length === 0) return '';
+    
+    const headers = this.crudConfig.columns.map(col => col.label).join(',');
+    const rows = data.map(item => 
+      this.crudConfig.columns.map(col => {
+        const value = item[col.key];
+        return typeof value === 'string' && value.includes(',') 
+          ? `"${value}"` 
+          : value || '';
+      }).join(',')
+    );
+    
+    return [headers, ...rows].join('\n');
+  }
+
+  private downloadCSV(content: string, filename: string) {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 } 

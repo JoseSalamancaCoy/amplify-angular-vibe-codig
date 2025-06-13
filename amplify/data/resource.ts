@@ -12,12 +12,12 @@ const schema = a.schema({
     pathName: a.string().required(),
     minSize: a.integer().required(),
     maxSize: a.integer().required(),
-    destination: a.string().required(),
+    destinationName: a.string().required(), // Nombre del destino como string
     audienceType: a.enum(['DTC', 'HCP', 'NPI_TO_DTC']),
     cadence: a.string().required(),
     flags: a.string(),
     active: a.boolean().default(true),
-    // Relaciones
+    // Relaciones opcionales
     tenantId: a.id(),
     tenant: a.belongsTo('Tenant', 'tenantId'),
     conceptGroupId: a.id(),
@@ -36,7 +36,6 @@ const schema = a.schema({
     fileFormatRequirements: a.string(),
     active: a.boolean().default(true),
     // Relaciones
-    audiences: a.hasMany('Audience', 'destination'),
     bridges: a.hasMany('Bridge', 'destinationId'),
     metadataRequirements: a.hasMany('MetadataRequirement', 'destinationId'),
     externalBuckets: a.hasMany('ExternalBucket', 'destinationId'),

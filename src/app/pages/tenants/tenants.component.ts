@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
+import { CrudBaseComponent, CrudConfig } from '../../shared/components/crud-base/crud-base.component';
 
 @Component({
   selector: 'app-tenants',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CrudBaseComponent],
   template: `
     <div class="page-container">
       <div class="page-header">
@@ -43,12 +44,22 @@ import { DataService } from '../../services/data.service';
         </div>
         <p>La interfaz CRUD completa estará disponible en la siguiente fase del desarrollo.</p>
       </div>
+
+      <app-crud-base
+        [config]="crudConfig"
+        [data]="tenants"
+        [loading]="loading"
+        (create)="onCreateTenant($event)"
+        (update)="onUpdateTenant($event)"
+        (delete)="onDeleteTenant($event)"
+        (export)="onExportTenants()"
+      ></app-crud-base>
     </div>
   `,
   styles: [`
     .page-container {
       padding: 24px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -138,34 +149,167 @@ import { DataService } from '../../services/data.service';
   `]
 })
 export class TenantsComponent implements OnInit {
+  tenants: any[] = [];
+  loading = false;
   totalTenants = 0;
   activeTenants = 0;
   pharmaClients = 0;
   dspClients = 0;
 
+  crudConfig: CrudConfig = {
+    entityName: 'Tenant',
+    columns: [
+      {
+        key: 'name',
+        label: 'Name',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'clientId',
+        label: 'Client ID',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'configurationSettings',
+        label: 'Configuration',
+        type: 'text',
+        sortable: false,
+        filterable: false,
+        required: false
+      },
+      {
+        key: 'active',
+        label: 'Active',
+        type: 'boolean',
+        sortable: true,
+        filterable: true,
+        required: false
+      }
+    ],
+    actions: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+      export: true
+    },
+    pagination: {
+      pageSize: 10,
+      pageSizeOptions: [5, 10, 25, 50, 100]
+    }
+  };
+
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    this.loadStats();
+    this.loadTenants();
   }
 
-  async loadStats() {
+  async loadTenants() {
+    this.loading = true;
     try {
-      const tenants = await this.dataService.getTenants();
-      this.totalTenants = tenants.length;
-      this.activeTenants = tenants.filter((t: any) => t.active).length;
-      this.pharmaClients = tenants.filter((t: any) => 
+      const result = await this.dataService.getTenants();
+      this.tenants = result || [];
+      this.totalTenants = this.tenants.length;
+      this.activeTenants = this.tenants.filter((t: any) => t.active).length;
+      this.pharmaClients = this.tenants.filter((t: any) => 
         t.name?.toLowerCase().includes('biogen') || 
         t.name?.toLowerCase().includes('pharma')
       ).length;
-      this.dspClients = tenants.filter((t: any) => 
+      this.dspClients = this.tenants.filter((t: any) => 
         ['viant', 'nexxen', 'jungroup', 'pulsepoint'].some(dsp => 
           t.name?.toLowerCase().includes(dsp)
         )
       ).length;
-    } catch (error) {
-      console.error('Error loading tenant stats:', error);
+             console.log('Tenants loaded:', this.tenants);
+     } catch (error) {
+       console.error('Error loading tenants:', error);
+       this.tenants = [];
+       if (error instanceof Error) {
+         alert(`Error loading tenants: ${error.message}`);
+       } else {
+         alert('Error loading tenants. Please check backend connection.');
+       }
+    } finally {
+      this.loading = false;
     }
+  }
+
+  async onCreateTenant(tenantData: any) {
+    try {
+      await this.dataService.createTenant(tenantData);
+      await this.loadTenants();
+      alert('Tenant created successfully');
+    } catch (error) {
+      console.error('Error creating tenant:', error);
+      alert('Error creating tenant');
+    }
+  }
+
+  async onUpdateTenant(event: { id: string, data: any }) {
+    try {
+      await this.dataService.updateTenant(event.id, event.data);
+      await this.loadTenants();
+      alert('Tenant updated successfully');
+    } catch (error) {
+      console.error('Error updating tenant:', error);
+      alert('Error updating tenant');
+    }
+  }
+
+  async onDeleteTenant(id: string) {
+    try {
+      await this.dataService.deleteTenant(id);
+      await this.loadTenants();
+      alert('Tenant deleted successfully');
+    } catch (error) {
+      console.error('Error deleting tenant:', error);
+      alert('Error deleting tenant');
+    }
+  }
+
+  onExportTenants() {
+    try {
+      const csvContent = this.generateCSV(this.tenants);
+      this.downloadCSV(csvContent, 'tenants.csv');
+    } catch (error) {
+      console.error('Error exporting tenants:', error);
+      alert('Error exporting tenants');
+    }
+  }
+
+  private generateCSV(data: any[]): string {
+    if (data.length === 0) return '';
+    
+    const headers = this.crudConfig.columns.map(col => col.label).join(',');
+    const rows = data.map(item => 
+      this.crudConfig.columns.map(col => {
+        const value = item[col.key];
+        return typeof value === 'string' && value.includes(',') 
+          ? `"${value}"` 
+          : value || '';
+      }).join(',')
+    );
+    
+    return [headers, ...rows].join('\n');
+  }
+
+  private downloadCSV(content: string, filename: string) {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   async createSampleTenant() {
@@ -179,7 +323,7 @@ export class TenantsComponent implements OnInit {
           encryption: true
         })
       });
-      await this.loadStats();
+      await this.loadTenants();
       alert('Cliente de ejemplo creado exitosamente');
     } catch (error) {
       console.error('Error creating sample tenant:', error);

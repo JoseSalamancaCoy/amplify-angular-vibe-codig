@@ -1,182 +1,226 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
+import { CrudBaseComponent, CrudConfig } from '../../shared/components/crud-base/crud-base.component';
 
 @Component({
   selector: 'app-audiences',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CrudBaseComponent],
   template: `
     <div class="page-container">
-      <div class="page-header">
-        <h1>Gestión de Audiencias</h1>
-        <p class="page-description">
-          Administra las audiencias predictivas disponibles para entrega a múltiples destinos
-        </p>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value">{{ totalAudiences }}</div>
-          <div class="stat-label">Total Audiencias</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">{{ activeAudiences }}</div>
-          <div class="stat-label">Activas</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">{{ dtcAudiences }}</div>
-          <div class="stat-label">DTC</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">{{ hcpAudiences }}</div>
-          <div class="stat-label">HCP</div>
-        </div>
-      </div>
-
-      <div class="content-section">
-                 <div class="section-header">
-           <h2>Próximamente</h2>
-           <button class="btn-primary" (click)="createSampleAudience()">
-             Crear Audiencia Ejemplo
-           </button>
-         </div>
-        <p>La interfaz CRUD completa estará disponible en la siguiente fase del desarrollo.</p>
-      </div>
+      <app-crud-base
+        [config]="crudConfig"
+        [data]="audiences"
+        [loading]="loading"
+        (create)="onCreateAudience($event)"
+        (update)="onUpdateAudience($event)"
+        (delete)="onDeleteAudience($event)"
+        (export)="onExportAudiences()"
+      ></app-crud-base>
     </div>
   `,
   styles: [`
     .page-container {
       padding: 24px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
-    }
-
-    .page-header {
-      margin-bottom: 32px;
-    }
-
-    .page-header h1 {
-      color: var(--primary-color);
-      font-size: 2rem;
-      font-weight: 600;
-      margin: 0 0 8px 0;
-    }
-
-    .page-description {
-      color: var(--text-secondary);
-      font-size: 1rem;
-      margin: 0;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 32px;
-    }
-
-    .stat-card {
-      background: white;
-      border-radius: 8px;
-      padding: 24px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      border-left: 4px solid var(--primary-color);
-    }
-
-    .stat-value {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--primary-color);
-      line-height: 1;
-    }
-
-    .stat-label {
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-      margin-top: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .content-section {
-      background: white;
-      border-radius: 8px;
-      padding: 24px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .section-header h2 {
-      color: var(--text-primary);
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin: 0;
-    }
-
-    .btn-primary {
-      background: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 12px 24px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-dark);
     }
   `]
 })
 export class AudiencesComponent implements OnInit {
-  totalAudiences = 0;
-  activeAudiences = 0;
-  dtcAudiences = 0;
-  hcpAudiences = 0;
+  audiences: any[] = [];
+  loading = false;
+
+  crudConfig: CrudConfig = {
+    entityName: 'Audience',
+    columns: [
+      {
+        key: 'pathName',
+        label: 'Path',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'audienceType',
+        label: 'Type',
+        type: 'select',
+        sortable: true,
+        filterable: true,
+        required: true,
+        options: [
+          { value: 'DTC', label: 'Direct to Consumer' },
+          { value: 'HCP', label: 'Healthcare Professional' },
+          { value: 'NPI_TO_DTC', label: 'NPI to DTC' }
+        ]
+      },
+      {
+        key: 'destinationName',
+        label: 'Destination',
+        type: 'select',
+        sortable: true,
+        filterable: true,
+        required: true,
+        options: [
+          { value: 'NEXXEN', label: 'Nexxen' },
+          { value: 'VIANT', label: 'Viant' },
+          { value: 'COMSCORE', label: 'Comscore' },
+          { value: 'PULSEPOINT', label: 'PulsePoint' },
+          { value: 'LIVERAMP', label: 'LiveRamp' },
+          { value: 'DEEPINTENT', label: 'DeepIntent' },
+          { value: 'SEMCASTING', label: 'Semcasting' },
+          { value: 'LASSO', label: 'Lasso' },
+          { value: 'JUNGROUP', label: 'Jun Group' }
+        ]
+      },
+      {
+        key: 'minSize',
+        label: 'Min Size',
+        type: 'number',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'maxSize',
+        label: 'Max Size',
+        type: 'number',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'cadence',
+        label: 'Frequency',
+        type: 'select',
+        sortable: true,
+        filterable: true,
+        required: true,
+        options: [
+          { value: 'daily', label: 'Daily' },
+          { value: 'weekly', label: 'Weekly' },
+          { value: 'monthly', label: 'Monthly' },
+          { value: 'quarterly', label: 'Quarterly' }
+        ]
+      },
+      {
+        key: 'active',
+        label: 'Active',
+        type: 'boolean',
+        sortable: true,
+        filterable: true,
+        required: false
+      }
+    ],
+    actions: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+      export: true
+    },
+    pagination: {
+      pageSize: 10,
+      pageSizeOptions: [5, 10, 25, 50, 100]
+    }
+  };
 
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    this.loadStats();
+    this.loadAudiences();
   }
 
-  async loadStats() {
+  async loadAudiences() {
+    this.loading = true;
     try {
-      const audiences = await this.dataService.getAudiences();
-      this.totalAudiences = audiences.length;
-      this.activeAudiences = audiences.filter((a: any) => a.flags?.includes('active')).length;
-      this.dtcAudiences = audiences.filter((a: any) => a.audienceType === 'DTC').length;
-      this.hcpAudiences = audiences.filter((a: any) => a.audienceType === 'HCP').length;
+      const result = await this.dataService.getAudiences();
+      this.audiences = result || [];
+      console.log('Audiences loaded:', this.audiences);
     } catch (error) {
-      console.error('Error loading audience stats:', error);
+      console.error('Error loading audiences:', error);
+      this.audiences = [];
+      // Show more specific error
+      if (error instanceof Error) {
+        alert(`Error loading audiences: ${error.message}`);
+      } else {
+        alert('Error loading audiences. Please check backend connection.');
+      }
+    } finally {
+      this.loading = false;
     }
   }
 
-  async createSampleAudience() {
+  async onCreateAudience(audienceData: any) {
     try {
-      await this.dataService.createAudience({
-        pathName: '/sample/dtc-diabetes',
-        minSize: 1000,
-        maxSize: 50000,
-        destination: 'NEXXEN',
-        audienceType: 'DTC',
-        cadence: 'weekly',
-        flags: 'active'
-      });
-      await this.loadStats();
-      alert('Audiencia de ejemplo creada exitosamente');
+      await this.dataService.createAudience(audienceData);
+      await this.loadAudiences();
+      alert('Audience created successfully');
     } catch (error) {
-      console.error('Error creating sample audience:', error);
-      alert('Error al crear audiencia de ejemplo');
+      console.error('Error creating audience:', error);
+      alert('Error creating audience');
     }
+  }
+
+  async onUpdateAudience(event: { id: string, data: any }) {
+    try {
+      await this.dataService.updateAudience(event.id, event.data);
+      await this.loadAudiences();
+      alert('Audience updated successfully');
+    } catch (error) {
+      console.error('Error updating audience:', error);
+      alert('Error updating audience');
+    }
+  }
+
+  async onDeleteAudience(id: string) {
+    try {
+      await this.dataService.deleteAudience(id);
+      await this.loadAudiences();
+      alert('Audience deleted successfully');
+    } catch (error) {
+      console.error('Error deleting audience:', error);
+      alert('Error deleting audience');
+    }
+  }
+
+  onExportAudiences() {
+    try {
+      const csvContent = this.generateCSV(this.audiences);
+      this.downloadCSV(csvContent, 'audiences.csv');
+    } catch (error) {
+      console.error('Error exporting audiences:', error);
+      alert('Error exporting audiences');
+    }
+  }
+
+  private generateCSV(data: any[]): string {
+    if (data.length === 0) return '';
+    
+    const headers = this.crudConfig.columns.map(col => col.label).join(',');
+    const rows = data.map(item => 
+      this.crudConfig.columns.map(col => {
+        const value = item[col.key];
+        return typeof value === 'string' && value.includes(',') 
+          ? `"${value}"` 
+          : value || '';
+      }).join(',')
+    );
+    
+    return [headers, ...rows].join('\n');
+  }
+
+  private downloadCSV(content: string, filename: string) {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 } 

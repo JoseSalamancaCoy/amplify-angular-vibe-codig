@@ -1,50 +1,55 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DataService } from '../../services/data.service';
+import { CrudBaseComponent, CrudConfig } from '../../shared/components/crud-base/crud-base.component';
 
 @Component({
   selector: 'app-metadata-requirements',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CrudBaseComponent],
   template: `
     <div class="page-container">
       <div class="page-header">
-        <h1>Requisitos de Metadatos</h1>
+        <h1>Metadata Requirements</h1>
         <p class="page-description">
-          Define la estructura de archivos de metadatos requerida por cada destino
+          Define metadata file structure required by each destination
         </p>
       </div>
 
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-value">9</div>
-          <div class="stat-label">Destinos Configurados</div>
+          <div class="stat-label">Configured Destinations</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">2</div>
-          <div class="stat-label">Tipos Metadata</div>
+          <div class="stat-label">Metadata Types</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">15</div>
-          <div class="stat-label">Columnas Requeridas</div>
+          <div class="stat-label">Required Columns</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">5</div>
-          <div class="stat-label">Formatos Archivo</div>
+          <div class="stat-label">File Formats</div>
         </div>
       </div>
 
-      <div class="content-section">
-        <div class="section-header">
-          <h2>Próximamente</h2>
-        </div>
-        <p>La interfaz CRUD completa estará disponible en la siguiente fase del desarrollo.</p>
-      </div>
+      <app-crud-base
+        [config]="crudConfig"
+        [data]="metadataRequirements"
+        [loading]="loading"
+        (create)="onCreateMetadataRequirement($event)"
+        (update)="onUpdateMetadataRequirement($event)"
+        (delete)="onDeleteMetadataRequirement($event)"
+        (export)="onExportMetadataRequirements()"
+      ></app-crud-base>
     </div>
   `,
   styles: [`
     .page-container {
       padding: 24px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -118,10 +123,147 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class MetadataRequirementsComponent implements OnInit {
+  metadataRequirements: any[] = [];
+  loading = false;
 
-  constructor() {}
+  crudConfig: CrudConfig = {
+    entityName: 'Metadata Requirement',
+    columns: [
+      {
+        key: 'destinationId',
+        label: 'Destination ID',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'metadataType',
+        label: 'Metadata Type',
+        type: 'select',
+        sortable: true,
+        filterable: true,
+        required: true,
+        options: [
+          { value: 'METADATA', label: 'Metadata' },
+          { value: 'TAXONOMY', label: 'Taxonomy' }
+        ]
+      },
+      {
+        key: 'requiredColumns',
+        label: 'Required Columns',
+        type: 'text',
+        sortable: false,
+        filterable: false,
+        required: true
+      }
+    ],
+    actions: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+      export: true
+    },
+    pagination: {
+      pageSize: 10,
+      pageSizeOptions: [5, 10, 25, 50, 100]
+    }
+  };
+
+  constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    // Component initialization
+    this.loadMetadataRequirements();
+  }
+
+  async loadMetadataRequirements() {
+    this.loading = true;
+    try {
+      const result = await this.dataService.getMetadataRequirements();
+      this.metadataRequirements = result || [];
+      console.log('Metadata requirements loaded:', this.metadataRequirements);
+    } catch (error) {
+      console.error('Error loading metadata requirements:', error);
+      this.metadataRequirements = [];
+      if (error instanceof Error) {
+        alert(`Error loading metadata requirements: ${error.message}`);
+      } else {
+        alert('Error loading metadata requirements. Please check backend connection.');
+      }
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async onCreateMetadataRequirement(requirementData: any) {
+    try {
+      await this.dataService.createMetadataRequirement(requirementData);
+      await this.loadMetadataRequirements();
+      alert('Metadata requirement created successfully');
+    } catch (error) {
+      console.error('Error creating metadata requirement:', error);
+      alert('Error creating metadata requirement');
+    }
+  }
+
+  async onUpdateMetadataRequirement(event: { id: string, data: any }) {
+    try {
+      await this.dataService.updateMetadataRequirement(event.id, event.data);
+      await this.loadMetadataRequirements();
+      alert('Metadata requirement updated successfully');
+    } catch (error) {
+      console.error('Error updating metadata requirement:', error);
+      alert('Error updating metadata requirement');
+    }
+  }
+
+  async onDeleteMetadataRequirement(id: string) {
+    try {
+      await this.dataService.deleteMetadataRequirement(id);
+      await this.loadMetadataRequirements();
+      alert('Metadata requirement deleted successfully');
+    } catch (error) {
+      console.error('Error deleting metadata requirement:', error);
+      alert('Error deleting metadata requirement');
+    }
+  }
+
+  onExportMetadataRequirements() {
+    try {
+      const csvContent = this.generateCSV(this.metadataRequirements);
+      this.downloadCSV(csvContent, 'metadata-requirements.csv');
+    } catch (error) {
+      console.error('Error exporting metadata requirements:', error);
+      alert('Error exporting metadata requirements');
+    }
+  }
+
+  private generateCSV(data: any[]): string {
+    if (data.length === 0) return '';
+    
+    const headers = this.crudConfig.columns.map(col => col.label).join(',');
+    const rows = data.map(item => 
+      this.crudConfig.columns.map(col => {
+        const value = item[col.key];
+        return typeof value === 'string' && value.includes(',') 
+          ? `"${value}"` 
+          : value || '';
+      }).join(',')
+    );
+    
+    return [headers, ...rows].join('\n');
+  }
+
+  private downloadCSV(content: string, filename: string) {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 } 

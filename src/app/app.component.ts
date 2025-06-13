@@ -172,7 +172,7 @@ export class AppComponent implements OnInit, OnDestroy {
         pathName: '/healthcare/diabetes/hcp',
         minSize: 1000,
         maxSize: 50000,
-        destination: 'Comscore Demo',
+        destinationName: 'Comscore Demo',
         audienceType: 'HCP',
         cadence: 'weekly'
       });
