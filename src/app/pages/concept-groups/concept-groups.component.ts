@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
+import { CrudBaseComponent, CrudConfig } from '../../shared/components/crud-base/crud-base.component';
 
 @Component({
   selector: 'app-concept-groups',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CrudBaseComponent],
   template: `
     <div class="page-container">
       <div class="page-header">
@@ -43,12 +44,22 @@ import { DataService } from '../../services/data.service';
         </div>
         <p>La interfaz CRUD completa estará disponible en la siguiente fase del desarrollo.</p>
       </div>
+
+      <app-crud-base
+        [config]="crudConfig"
+        [data]="conceptGroups"
+        [loading]="loading"
+        (create)="onCreateConceptGroup($event)"
+        (update)="onUpdateConceptGroup($event)"
+        (delete)="onDeleteConceptGroup($event)"
+        (export)="onExportConceptGroups()"
+      ></app-crud-base>
     </div>
   `,
   styles: [`
     .page-container {
       padding: 24px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -142,11 +153,75 @@ export class ConceptGroupsComponent implements OnInit {
   activeGroups = 0;
   medicationGroups = 0;
   diagnosticGroups = 0;
+  conceptGroups: any[] = [];
+  loading = false;
+
+  crudConfig: CrudConfig = {
+    entityName: 'Grupo de Conceptos',
+    columns: [
+      {
+        key: 'groupName',
+        label: 'Nombre del Grupo',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'medicalCategory',
+        label: 'Categoría Médica',
+        type: 'select',
+        sortable: true,
+        filterable: true,
+        required: true,
+        options: [
+          { value: 'Endocrinology', label: 'Endocrinología' },
+          { value: 'Cardiology', label: 'Cardiología' },
+          { value: 'Oncology', label: 'Oncología' },
+          { value: 'Neurology', label: 'Neurología' },
+          { value: 'Immunology', label: 'Inmunología' },
+          { value: 'Dermatology', label: 'Dermatología' },
+          { value: 'Psychiatry', label: 'Psiquiatría' },
+          { value: 'Gastroenterology', label: 'Gastroenterología' },
+          { value: 'Rheumatology', label: 'Reumatología' },
+          { value: 'Hematology', label: 'Hematología' }
+        ]
+      },
+      {
+        key: 'description',
+        label: 'Descripción',
+        type: 'text',
+        sortable: false,
+        filterable: false,
+        required: false
+      },
+      {
+        key: 'active',
+        label: 'Activo',
+        type: 'boolean',
+        sortable: true,
+        filterable: true,
+        required: false
+      }
+    ],
+    actions: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+      export: true
+    },
+    pagination: {
+      pageSize: 10,
+      pageSizeOptions: [5, 10, 25, 50, 100]
+    }
+  };
 
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
     this.loadStats();
+    this.loadConceptGroups();
   }
 
   async loadStats() {
@@ -168,6 +243,96 @@ export class ConceptGroupsComponent implements OnInit {
     }
   }
 
+  async loadConceptGroups() {
+    this.loading = true;
+    try {
+      const result = await this.dataService.getConceptGroups();
+      this.conceptGroups = result || [];
+      console.log('Grupos de conceptos cargados:', this.conceptGroups);
+    } catch (error) {
+      console.error('Error loading concept groups:', error);
+      this.conceptGroups = [];
+      if (error instanceof Error) {
+        alert(`Error al cargar los grupos de conceptos: ${error.message}`);
+      } else {
+        alert('Error al cargar los grupos de conceptos. Verifique la conexión con el backend.');
+      }
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async onCreateConceptGroup(conceptGroupData: any) {
+    try {
+      await this.dataService.createConceptGroup(conceptGroupData);
+      await this.loadConceptGroups();
+      alert('Grupo de conceptos creado exitosamente');
+    } catch (error) {
+      console.error('Error creating concept group:', error);
+      alert('Error al crear el grupo de conceptos');
+    }
+  }
+
+  async onUpdateConceptGroup(event: { id: string, data: any }) {
+    try {
+      await this.dataService.updateConceptGroup(event.id, event.data);
+      await this.loadConceptGroups();
+      alert('Grupo de conceptos actualizado exitosamente');
+    } catch (error) {
+      console.error('Error updating concept group:', error);
+      alert('Error al actualizar el grupo de conceptos');
+    }
+  }
+
+  async onDeleteConceptGroup(id: string) {
+    try {
+      await this.dataService.deleteConceptGroup(id);
+      await this.loadConceptGroups();
+      alert('Grupo de conceptos eliminado exitosamente');
+    } catch (error) {
+      console.error('Error deleting concept group:', error);
+      alert('Error al eliminar el grupo de conceptos');
+    }
+  }
+
+  onExportConceptGroups() {
+    try {
+      const csvContent = this.generateCSV(this.conceptGroups);
+      this.downloadCSV(csvContent, 'grupos-conceptos.csv');
+    } catch (error) {
+      console.error('Error exporting concept groups:', error);
+      alert('Error al exportar los grupos de conceptos');
+    }
+  }
+
+  private generateCSV(data: any[]): string {
+    if (data.length === 0) return '';
+    
+    const headers = this.crudConfig.columns.map(col => col.label).join(',');
+    const rows = data.map(item => 
+      this.crudConfig.columns.map(col => {
+        const value = item[col.key];
+        return typeof value === 'string' && value.includes(',') 
+          ? `"${value}"` 
+          : value || '';
+      }).join(',')
+    );
+    
+    return [headers, ...rows].join('\n');
+  }
+
+  private downloadCSV(content: string, filename: string) {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   async createSampleConceptGroup() {
     try {
       await this.dataService.createConceptGroup({
@@ -175,7 +340,7 @@ export class ConceptGroupsComponent implements OnInit {
         medicalCategory: 'Endocrinology',
         description: 'Audiencias relacionadas con el manejo de la diabetes'
       });
-      await this.loadStats();
+      await this.loadConceptGroups();
       alert('Grupo de conceptos de ejemplo creado exitosamente');
     } catch (error) {
       console.error('Error creating sample concept group:', error);

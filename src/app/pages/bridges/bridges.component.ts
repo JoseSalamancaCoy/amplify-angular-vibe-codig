@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
+import { CrudBaseComponent, CrudConfig } from '../../shared/components/crud-base/crud-base.component';
 
 @Component({
   selector: 'app-bridges',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CrudBaseComponent],
   template: `
     <div class="page-container">
       <div class="page-header">
@@ -43,12 +44,22 @@ import { DataService } from '../../services/data.service';
         </div>
         <p>La interfaz CRUD completa estará disponible en la siguiente fase del desarrollo.</p>
       </div>
+
+      <app-crud-base
+        [config]="crudConfig"
+        [data]="bridges"
+        [loading]="loading"
+        (create)="onCreateBridge($event)"
+        (update)="onUpdateBridge($event)"
+        (delete)="onDeleteBridge($event)"
+        (export)="onExportBridges()"
+      ></app-crud-base>
     </div>
   `,
   styles: [`
     .page-container {
       padding: 24px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -142,23 +153,161 @@ export class BridgesComponent implements OnInit {
   throtleIds = 0;
   datavantTokens = 0;
   purpleIds = 0;
+  bridges: any[] = [];
+  loading = false;
+
+  crudConfig: CrudConfig = {
+    entityName: 'Puente de Datos',
+    columns: [
+      {
+        key: 'patientId',
+        label: 'ID Paciente',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'customId',
+        label: 'ID Personalizado',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'idType',
+        label: 'Tipo de ID',
+        type: 'select',
+        sortable: true,
+        filterable: true,
+        required: true,
+        options: [
+          { value: 'THROTLE_ID', label: 'Throtle ID' },
+          { value: 'DATAVANT_TOKEN', label: 'Datavant Token' },
+          { value: 'PURPLE_ID', label: 'Purple ID' }
+        ]
+      },
+      {
+        key: 'destinationId',
+        label: 'ID Destino',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      }
+    ],
+    actions: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+      export: true
+    },
+    pagination: {
+      pageSize: 10,
+      pageSizeOptions: [5, 10, 25, 50, 100]
+    }
+  };
 
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    this.loadStats();
+    this.loadBridges();
   }
 
-  async loadStats() {
+  async loadBridges() {
+    this.loading = true;
     try {
-      const bridges = await this.dataService.getBridges();
-      this.totalBridges = bridges.length;
-      this.throtleIds = bridges.filter((b: any) => b.idType === 'THROTLE_ID').length;
-      this.datavantTokens = bridges.filter((b: any) => b.idType === 'DATAVANT_TOKEN').length;
-      this.purpleIds = bridges.filter((b: any) => b.idType === 'PURPLE_ID').length;
+      const result = await this.dataService.getBridges();
+      this.bridges = result || [];
+      console.log('Puentes de datos cargados:', this.bridges);
+      this.totalBridges = this.bridges.length;
+      this.throtleIds = this.bridges.filter((b: any) => b.idType === 'THROTLE_ID').length;
+      this.datavantTokens = this.bridges.filter((b: any) => b.idType === 'DATAVANT_TOKEN').length;
+      this.purpleIds = this.bridges.filter((b: any) => b.idType === 'PURPLE_ID').length;
     } catch (error) {
-      console.error('Error loading bridge stats:', error);
+      console.error('Error loading bridges:', error);
+      this.bridges = [];
+      if (error instanceof Error) {
+        alert(`Error al cargar los puentes de datos: ${error.message}`);
+      } else {
+        alert('Error al cargar los puentes de datos. Verifique la conexión con el backend.');
+      }
+    } finally {
+      this.loading = false;
     }
+  }
+
+  async onCreateBridge(bridgeData: any) {
+    try {
+      await this.dataService.createBridge(bridgeData);
+      await this.loadBridges();
+      alert('Puente de datos creado exitosamente');
+    } catch (error) {
+      console.error('Error creating bridge:', error);
+      alert('Error al crear el puente de datos');
+    }
+  }
+
+  async onUpdateBridge(event: { id: string, data: any }) {
+    try {
+      await this.dataService.updateBridge(event.id, event.data);
+      await this.loadBridges();
+      alert('Puente de datos actualizado exitosamente');
+    } catch (error) {
+      console.error('Error updating bridge:', error);
+      alert('Error al actualizar el puente de datos');
+    }
+  }
+
+  async onDeleteBridge(id: string) {
+    try {
+      await this.dataService.deleteBridge(id);
+      await this.loadBridges();
+      alert('Puente de datos eliminado exitosamente');
+    } catch (error) {
+      console.error('Error deleting bridge:', error);
+      alert('Error al eliminar el puente de datos');
+    }
+  }
+
+  onExportBridges() {
+    try {
+      const csvContent = this.generateCSV(this.bridges);
+      this.downloadCSV(csvContent, 'puentes-datos.csv');
+    } catch (error) {
+      console.error('Error exporting bridges:', error);
+      alert('Error al exportar los puentes de datos');
+    }
+  }
+
+  private generateCSV(data: any[]): string {
+    if (data.length === 0) return '';
+    
+    const headers = this.crudConfig.columns.map(col => col.label).join(',');
+    const rows = data.map(item => 
+      this.crudConfig.columns.map(col => {
+        const value = item[col.key];
+        return typeof value === 'string' && value.includes(',') 
+          ? `"${value}"` 
+          : value || '';
+      }).join(',')
+    );
+    
+    return [headers, ...rows].join('\n');
+  }
+
+  private downloadCSV(content: string, filename: string) {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   async createSampleBridge() {
@@ -169,7 +318,7 @@ export class BridgesComponent implements OnInit {
         idType: 'THROTLE_ID',
         destinationId: 'dest_sample_001'
       });
-      await this.loadStats();
+      await this.loadBridges();
       alert('Puente de ejemplo creado exitosamente');
     } catch (error) {
       console.error('Error creating sample bridge:', error);

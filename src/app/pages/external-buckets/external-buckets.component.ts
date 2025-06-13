@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DataService } from '../../services/data.service';
+import { CrudBaseComponent, CrudConfig } from '../../shared/components/crud-base/crud-base.component';
 
 @Component({
   selector: 'app-external-buckets',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CrudBaseComponent],
   template: `
     <div class="page-container">
       <div class="page-header">
@@ -39,12 +41,22 @@ import { CommonModule } from '@angular/common';
         </div>
         <p>La interfaz CRUD completa estará disponible en la siguiente fase del desarrollo.</p>
       </div>
+
+      <app-crud-base
+        [config]="crudConfig"
+        [data]="externalBuckets"
+        [loading]="loading"
+        (create)="onCreateExternalBucket($event)"
+        (update)="onUpdateExternalBucket($event)"
+        (delete)="onDeleteExternalBucket($event)"
+        (export)="onExportExternalBuckets()"
+      ></app-crud-base>
     </div>
   `,
   styles: [`
     .page-container {
       padding: 24px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -118,10 +130,159 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class ExternalBucketsComponent implements OnInit {
+  externalBuckets: any[] = [];
+  loading = false;
 
-  constructor() {}
+  crudConfig: CrudConfig = {
+    entityName: 'Bucket Externo',
+    columns: [
+      {
+        key: 'bucketName',
+        label: 'Nombre del Bucket',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'tenantId',
+        label: 'ID Inquilino',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'url1',
+        label: 'URL Principal',
+        type: 'text',
+        sortable: false,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'url2',
+        label: 'URL Secundaria',
+        type: 'text',
+        sortable: false,
+        filterable: false,
+        required: false
+      },
+      {
+        key: 'active',
+        label: 'Activo',
+        type: 'boolean',
+        sortable: true,
+        filterable: true,
+        required: false
+      }
+    ],
+    actions: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+      export: true
+    },
+    pagination: {
+      pageSize: 10,
+      pageSizeOptions: [5, 10, 25, 50, 100]
+    }
+  };
+
+  constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    // Component initialization
+    this.loadExternalBuckets();
+  }
+
+  async loadExternalBuckets() {
+    this.loading = true;
+    try {
+      const result = await this.dataService.getExternalBuckets();
+      this.externalBuckets = result || [];
+      console.log('Buckets externos cargados:', this.externalBuckets);
+    } catch (error) {
+      console.error('Error loading external buckets:', error);
+      this.externalBuckets = [];
+      if (error instanceof Error) {
+        alert(`Error al cargar los buckets externos: ${error.message}`);
+      } else {
+        alert('Error al cargar los buckets externos. Verifique la conexión con el backend.');
+      }
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async onCreateExternalBucket(bucketData: any) {
+    try {
+      await this.dataService.createExternalBucket(bucketData);
+      await this.loadExternalBuckets();
+      alert('Bucket externo creado exitosamente');
+    } catch (error) {
+      console.error('Error creating external bucket:', error);
+      alert('Error al crear el bucket externo');
+    }
+  }
+
+  async onUpdateExternalBucket(event: { id: string, data: any }) {
+    try {
+      await this.dataService.updateExternalBucket(event.id, event.data);
+      await this.loadExternalBuckets();
+      alert('Bucket externo actualizado exitosamente');
+    } catch (error) {
+      console.error('Error updating external bucket:', error);
+      alert('Error al actualizar el bucket externo');
+    }
+  }
+
+  async onDeleteExternalBucket(id: string) {
+    try {
+      await this.dataService.deleteExternalBucket(id);
+      await this.loadExternalBuckets();
+      alert('Bucket externo eliminado exitosamente');
+    } catch (error) {
+      console.error('Error deleting external bucket:', error);
+      alert('Error al eliminar el bucket externo');
+    }
+  }
+
+  onExportExternalBuckets() {
+    try {
+      const csvContent = this.generateCSV(this.externalBuckets);
+      this.downloadCSV(csvContent, 'buckets-externos.csv');
+    } catch (error) {
+      console.error('Error exporting external buckets:', error);
+      alert('Error al exportar los buckets externos');
+    }
+  }
+
+  private generateCSV(data: any[]): string {
+    if (data.length === 0) return '';
+    
+    const headers = this.crudConfig.columns.map(col => col.label).join(',');
+    const rows = data.map(item => 
+      this.crudConfig.columns.map(col => {
+        const value = item[col.key];
+        return typeof value === 'string' && value.includes(',') 
+          ? `"${value}"` 
+          : value || '';
+      }).join(',')
+    );
+    
+    return [headers, ...rows].join('\n');
+  }
+
+  private downloadCSV(content: string, filename: string) {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 } 

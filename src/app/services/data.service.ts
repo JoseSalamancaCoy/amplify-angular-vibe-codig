@@ -116,6 +116,28 @@ export class DataService {
     }
   }
 
+  async updateDestination(id: string, updates: any) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.Destination.update({ id, ...updates });
+      return data;
+    } catch (error) {
+      console.error('Error al actualizar destino:', error);
+      throw error;
+    }
+  }
+
+  async deleteDestination(id: string) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.Destination.delete({ id });
+      return data;
+    } catch (error) {
+      console.error('Error al eliminar destino:', error);
+      throw error;
+    }
+  }
+
   // ===== TENANTS =====
   async getTenants() {
     await this.ensureAuthenticated();
@@ -139,6 +161,28 @@ export class DataService {
       return data;
     } catch (error) {
       console.error('Error al crear inquilino:', error);
+      throw error;
+    }
+  }
+
+  async updateTenant(id: string, updates: any) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.Tenant.update({ id, ...updates });
+      return data;
+    } catch (error) {
+      console.error('Error al actualizar inquilino:', error);
+      throw error;
+    }
+  }
+
+  async deleteTenant(id: string) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.Tenant.delete({ id });
+      return data;
+    } catch (error) {
+      console.error('Error al eliminar inquilino:', error);
       throw error;
     }
   }
@@ -170,6 +214,28 @@ export class DataService {
     }
   }
 
+  async updateConceptGroup(id: string, updates: any) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.ConceptGroup.update({ id, ...updates });
+      return data;
+    } catch (error) {
+      console.error('Error al actualizar grupo de conceptos:', error);
+      throw error;
+    }
+  }
+
+  async deleteConceptGroup(id: string) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.ConceptGroup.delete({ id });
+      return data;
+    } catch (error) {
+      console.error('Error al eliminar grupo de conceptos:', error);
+      throw error;
+    }
+  }
+
   // ===== BRIDGES =====
   async getBridges() {
     await this.ensureAuthenticated();
@@ -194,6 +260,180 @@ export class DataService {
       return data;
     } catch (error) {
       console.error('Error al crear puente:', error);
+      throw error;
+    }
+  }
+
+  async updateBridge(id: string, updates: any) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.Bridge.update({ id, ...updates });
+      return data;
+    } catch (error) {
+      console.error('Error al actualizar puente:', error);
+      throw error;
+    }
+  }
+
+  async deleteBridge(id: string) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.Bridge.delete({ id });
+      return data;
+    } catch (error) {
+      console.error('Error al eliminar puente:', error);
+      throw error;
+    }
+  }
+
+  // ===== EXTERNAL BUCKETS =====
+  async getExternalBuckets() {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.ExternalBucket.list();
+      return data;
+    } catch (error) {
+      console.error('Error al obtener buckets externos:', error);
+      throw error;
+    }
+  }
+
+  async createExternalBucket(bucket: {
+    bucketName: string;
+    tenantId: string;
+    url1?: string;
+    url2?: string;
+    destinationId?: string;
+  }) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.ExternalBucket.create(bucket);
+      return data;
+    } catch (error) {
+      console.error('Error al crear bucket externo:', error);
+      throw error;
+    }
+  }
+
+  async updateExternalBucket(id: string, updates: any) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.ExternalBucket.update({ id, ...updates });
+      return data;
+    } catch (error) {
+      console.error('Error al actualizar bucket externo:', error);
+      throw error;
+    }
+  }
+
+  async deleteExternalBucket(id: string) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.ExternalBucket.delete({ id });
+      return data;
+    } catch (error) {
+      console.error('Error al eliminar bucket externo:', error);
+      throw error;
+    }
+  }
+
+  // ===== ONBOARDING REQUIREMENTS =====
+  async getOnboardingRequirements() {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.OnboardingRequirement.list();
+      return data;
+    } catch (error) {
+      console.error('Error al obtener requisitos de incorporación:', error);
+      throw error;
+    }
+  }
+
+  async createOnboardingRequirement(requirement: {
+    destinationRoute: string;
+    credentials: string;
+    audienceType: 'DTC' | 'HCP' | 'NPI_TO_DTC';
+    fileFormats: string;
+    otsFrequency: string;
+    idTypes: string;
+  }) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.OnboardingRequirement.create(requirement);
+      return data;
+    } catch (error) {
+      console.error('Error al crear requisito de incorporación:', error);
+      throw error;
+    }
+  }
+
+  async updateOnboardingRequirement(id: string, updates: any) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.OnboardingRequirement.update({ id, ...updates });
+      return data;
+    } catch (error) {
+      console.error('Error al actualizar requisito de incorporación:', error);
+      throw error;
+    }
+  }
+
+  async deleteOnboardingRequirement(id: string) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.OnboardingRequirement.delete({ id });
+      return data;
+    } catch (error) {
+      console.error('Error al eliminar requisito de incorporación:', error);
+      throw error;
+    }
+  }
+
+  // ===== METADATA REQUIREMENTS =====
+  async getMetadataRequirements() {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.MetadataRequirement.list();
+      return data;
+    } catch (error) {
+      console.error('Error al obtener requisitos de metadatos:', error);
+      throw error;
+    }
+  }
+
+  async createMetadataRequirement(requirement: {
+    destinationId: string;
+    metadataType: 'METADATA' | 'TAXONOMY';
+    requiredColumns: string;
+  }) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.MetadataRequirement.create(requirement);
+      return data;
+    } catch (error) {
+      console.error('Error al crear requisito de metadatos:', error);
+      throw error;
+    }
+  }
+
+  async updateMetadataRequirement(id: string, updates: any) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.MetadataRequirement.update({ id, ...updates });
+      return data;
+    } catch (error) {
+      console.error('Error al actualizar requisito de metadatos:', error);
+      throw error;
+    }
+  }
+
+  async deleteMetadataRequirement(id: string) {
+    await this.ensureAuthenticated();
+    try {
+      const { data } = await this.client.models.MetadataRequirement.delete({ id });
+      return data;
+    } catch (error) {
+      console.error('Error al eliminar requisito de metadatos:', error);
       throw error;
     }
   }

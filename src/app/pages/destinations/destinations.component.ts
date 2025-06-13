@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
+import { CrudBaseComponent, CrudConfig } from '../../shared/components/crud-base/crud-base.component';
 
 @Component({
   selector: 'app-destinations',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CrudBaseComponent],
   template: `
     <div class="page-container">
       <div class="page-header">
@@ -43,12 +44,22 @@ import { DataService } from '../../services/data.service';
         </div>
         <p>La interfaz CRUD completa estará disponible en la siguiente fase del desarrollo.</p>
       </div>
+
+      <app-crud-base
+        [config]="crudConfig"
+        [data]="destinations"
+        [loading]="loading"
+        (create)="onCreateDestination($event)"
+        (update)="onUpdateDestination($event)"
+        (delete)="onDeleteDestination($event)"
+        (export)="onExportDestinations()"
+      ></app-crud-base>
     </div>
   `,
   styles: [`
     .page-container {
       padding: 24px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -138,15 +149,94 @@ import { DataService } from '../../services/data.service';
   `]
 })
 export class DestinationsComponent implements OnInit {
+  destinations: any[] = [];
+  loading = false;
   totalDestinations = 0;
   activeDestinations = 0;
   dspDestinations = 0;
   analyticsDestinations = 0;
 
+  crudConfig: CrudConfig = {
+    entityName: 'Destino',
+    columns: [
+      {
+        key: 'name',
+        label: 'Nombre',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'platform',
+        label: 'Plataforma',
+        type: 'select',
+        sortable: true,
+        filterable: true,
+        required: true,
+        options: [
+          { value: 'NEXXEN', label: 'Nexxen' },
+          { value: 'VIANT', label: 'Viant' },
+          { value: 'COMSCORE', label: 'Comscore' },
+          { value: 'PULSEPOINT', label: 'PulsePoint' },
+          { value: 'LIVERAMP', label: 'LiveRamp' },
+          { value: 'DEEPINTENT', label: 'DeepIntent' },
+          { value: 'SEMCASTING', label: 'Semcasting' },
+          { value: 'LASSO', label: 'Lasso' },
+          { value: 'JUNGROUP', label: 'Jun Group' }
+        ]
+      },
+      {
+        key: 'requiredHeaders',
+        label: 'Headers Requeridos',
+        type: 'text',
+        sortable: false,
+        filterable: false,
+        required: false
+      },
+      {
+        key: 'dvTokens',
+        label: 'Tokens DV',
+        type: 'text',
+        sortable: false,
+        filterable: false,
+        required: false
+      },
+      {
+        key: 'fileFormatRequirements',
+        label: 'Requisitos de Formato',
+        type: 'text',
+        sortable: false,
+        filterable: false,
+        required: false
+      },
+      {
+        key: 'active',
+        label: 'Activo',
+        type: 'boolean',
+        sortable: true,
+        filterable: true,
+        required: false
+      }
+    ],
+    actions: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+      export: true
+    },
+    pagination: {
+      pageSize: 10,
+      pageSizeOptions: [5, 10, 25, 50, 100]
+    }
+  };
+
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
     this.loadStats();
+    this.loadDestinations();
   }
 
   async loadStats() {
@@ -165,6 +255,96 @@ export class DestinationsComponent implements OnInit {
     }
   }
 
+  async loadDestinations() {
+    this.loading = true;
+    try {
+      const result = await this.dataService.getDestinations();
+      this.destinations = result || [];
+      console.log('Destinos cargados:', this.destinations);
+    } catch (error) {
+      console.error('Error loading destinations:', error);
+      this.destinations = [];
+      if (error instanceof Error) {
+        alert(`Error al cargar los destinos: ${error.message}`);
+      } else {
+        alert('Error al cargar los destinos. Verifique la conexión con el backend.');
+      }
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async onCreateDestination(destinationData: any) {
+    try {
+      await this.dataService.createDestination(destinationData);
+      await this.loadDestinations();
+      alert('Destino creado exitosamente');
+    } catch (error) {
+      console.error('Error creating destination:', error);
+      alert('Error al crear el destino');
+    }
+  }
+
+  async onUpdateDestination(event: { id: string, data: any }) {
+    try {
+      await this.dataService.updateDestination(event.id, event.data);
+      await this.loadDestinations();
+      alert('Destino actualizado exitosamente');
+    } catch (error) {
+      console.error('Error updating destination:', error);
+      alert('Error al actualizar el destino');
+    }
+  }
+
+  async onDeleteDestination(id: string) {
+    try {
+      await this.dataService.deleteDestination(id);
+      await this.loadDestinations();
+      alert('Destino eliminado exitosamente');
+    } catch (error) {
+      console.error('Error deleting destination:', error);
+      alert('Error al eliminar el destino');
+    }
+  }
+
+  onExportDestinations() {
+    try {
+      const csvContent = this.generateCSV(this.destinations);
+      this.downloadCSV(csvContent, 'destinos.csv');
+    } catch (error) {
+      console.error('Error exporting destinations:', error);
+      alert('Error al exportar los destinos');
+    }
+  }
+
+  private generateCSV(data: any[]): string {
+    if (data.length === 0) return '';
+    
+    const headers = this.crudConfig.columns.map(col => col.label).join(',');
+    const rows = data.map(item => 
+      this.crudConfig.columns.map(col => {
+        const value = item[col.key];
+        return typeof value === 'string' && value.includes(',') 
+          ? `"${value}"` 
+          : value || '';
+      }).join(',')
+    );
+    
+    return [headers, ...rows].join('\n');
+  }
+
+  private downloadCSV(content: string, filename: string) {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   async createSampleDestination() {
     try {
       await this.dataService.createDestination({
@@ -174,7 +354,7 @@ export class DestinationsComponent implements OnInit {
         dvTokens: 'sample_token_123',
         fileFormatRequirements: 'CSV format with header row'
       });
-      await this.loadStats();
+      await this.loadDestinations();
       alert('Destino de ejemplo creado exitosamente');
     } catch (error) {
       console.error('Error creating sample destination:', error);

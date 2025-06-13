@@ -1,127 +1,206 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DataService } from '../../services/data.service';
+import { CrudBaseComponent, CrudConfig } from '../../shared/components/crud-base/crud-base.component';
 
 @Component({
   selector: 'app-onboarding-requirements',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CrudBaseComponent],
   template: `
     <div class="page-container">
-      <div class="page-header">
-        <h1>Requisitos de Incorporación</h1>
-        <p class="page-description">
-          Especificaciones técnicas para la incorporación de nuevos destinos
-        </p>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value">9</div>
-          <div class="stat-label">Destinos Configurados</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">5</div>
-          <div class="stat-label">Formatos Soportados</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">3</div>
-          <div class="stat-label">Frecuencias OTS</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">4</div>
-          <div class="stat-label">Ubicaciones Storage</div>
-        </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <h2>Próximamente</h2>
-        </div>
-        <p>La interfaz CRUD completa estará disponible en la siguiente fase del desarrollo.</p>
-      </div>
+      <app-crud-base
+        [config]="crudConfig"
+        [data]="onboardingRequirements"
+        [loading]="loading"
+        (create)="onCreateOnboardingRequirement($event)"
+        (update)="onUpdateOnboardingRequirement($event)"
+        (delete)="onDeleteOnboardingRequirement($event)"
+        (export)="onExportOnboardingRequirements()"
+      ></app-crud-base>
     </div>
   `,
   styles: [`
     .page-container {
       padding: 24px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
-    }
-
-    .page-header {
-      margin-bottom: 32px;
-    }
-
-    .page-header h1 {
-      color: var(--primary-color);
-      font-size: 2rem;
-      font-weight: 600;
-      margin: 0 0 8px 0;
-    }
-
-    .page-description {
-      color: var(--text-secondary);
-      font-size: 1rem;
-      margin: 0;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 32px;
-    }
-
-    .stat-card {
-      background: white;
-      border-radius: 8px;
-      padding: 24px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      border-left: 4px solid var(--primary-color);
-    }
-
-    .stat-value {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--primary-color);
-      line-height: 1;
-    }
-
-    .stat-label {
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-      margin-top: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .content-section {
-      background: white;
-      border-radius: 8px;
-      padding: 24px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .section-header h2 {
-      color: var(--text-primary);
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin: 0;
     }
   `]
 })
 export class OnboardingRequirementsComponent implements OnInit {
+  onboardingRequirements: any[] = [];
+  loading = false;
 
-  constructor() {}
+  crudConfig: CrudConfig = {
+    entityName: 'Requisito de Incorporación',
+    columns: [
+      {
+        key: 'destinationRoute',
+        label: 'Ruta de Destino',
+        type: 'text',
+        sortable: true,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'credentials',
+        label: 'Credenciales',
+        type: 'text',
+        sortable: false,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'audienceType',
+        label: 'Tipo de Audiencia',
+        type: 'select',
+        sortable: true,
+        filterable: true,
+        required: true,
+        options: [
+          { value: 'DTC', label: 'DTC' },
+          { value: 'HCP', label: 'HCP' },
+          { value: 'NPI_TO_DTC', label: 'NPI to DTC' }
+        ]
+      },
+      {
+        key: 'fileFormats',
+        label: 'Formatos de Archivo',
+        type: 'text',
+        sortable: false,
+        filterable: false,
+        required: true
+      },
+      {
+        key: 'otsFrequency',
+        label: 'Frecuencia OTS',
+        type: 'select',
+        sortable: true,
+        filterable: true,
+        required: true,
+        options: [
+          { value: 'daily', label: 'Diario' },
+          { value: 'weekly', label: 'Semanal' },
+          { value: 'monthly', label: 'Mensual' },
+          { value: 'quarterly', label: 'Trimestral' }
+        ]
+      },
+      {
+        key: 'idTypes',
+        label: 'Tipos de ID',
+        type: 'text',
+        sortable: false,
+        filterable: false,
+        required: true
+      }
+    ],
+    actions: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+      export: true
+    },
+    pagination: {
+      pageSize: 10,
+      pageSizeOptions: [5, 10, 25, 50, 100]
+    }
+  };
+
+  constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    // Component initialization
+    this.loadOnboardingRequirements();
+  }
+
+  async loadOnboardingRequirements() {
+    this.loading = true;
+    try {
+      const result = await this.dataService.getOnboardingRequirements();
+      this.onboardingRequirements = result || [];
+      console.log('Requisitos de incorporación cargados:', this.onboardingRequirements);
+    } catch (error) {
+      console.error('Error loading onboarding requirements:', error);
+      this.onboardingRequirements = [];
+      if (error instanceof Error) {
+        alert(`Error al cargar los requisitos de incorporación: ${error.message}`);
+      } else {
+        alert('Error al cargar los requisitos de incorporación. Verifique la conexión con el backend.');
+      }
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async onCreateOnboardingRequirement(requirementData: any) {
+    try {
+      await this.dataService.createOnboardingRequirement(requirementData);
+      await this.loadOnboardingRequirements();
+      alert('Requisito de incorporación creado exitosamente');
+    } catch (error) {
+      console.error('Error creating onboarding requirement:', error);
+      alert('Error al crear el requisito de incorporación');
+    }
+  }
+
+  async onUpdateOnboardingRequirement(event: { id: string, data: any }) {
+    try {
+      await this.dataService.updateOnboardingRequirement(event.id, event.data);
+      await this.loadOnboardingRequirements();
+      alert('Requisito de incorporación actualizado exitosamente');
+    } catch (error) {
+      console.error('Error updating onboarding requirement:', error);
+      alert('Error al actualizar el requisito de incorporación');
+    }
+  }
+
+  async onDeleteOnboardingRequirement(id: string) {
+    try {
+      await this.dataService.deleteOnboardingRequirement(id);
+      await this.loadOnboardingRequirements();
+      alert('Requisito de incorporación eliminado exitosamente');
+    } catch (error) {
+      console.error('Error deleting onboarding requirement:', error);
+      alert('Error al eliminar el requisito de incorporación');
+    }
+  }
+
+  onExportOnboardingRequirements() {
+    try {
+      const csvContent = this.generateCSV(this.onboardingRequirements);
+      this.downloadCSV(csvContent, 'requisitos-incorporacion.csv');
+    } catch (error) {
+      console.error('Error exporting onboarding requirements:', error);
+      alert('Error al exportar los requisitos de incorporación');
+    }
+  }
+
+  private generateCSV(data: any[]): string {
+    if (data.length === 0) return '';
+    
+    const headers = this.crudConfig.columns.map(col => col.label).join(',');
+    const rows = data.map(item => 
+      this.crudConfig.columns.map(col => {
+        const value = item[col.key];
+        return typeof value === 'string' && value.includes(',') 
+          ? `"${value}"` 
+          : value || '';
+      }).join(',')
+    );
+    
+    return [headers, ...rows].join('\n');
+  }
+
+  private downloadCSV(content: string, filename: string) {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 } 
