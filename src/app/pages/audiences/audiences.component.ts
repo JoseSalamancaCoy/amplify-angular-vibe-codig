@@ -57,7 +57,7 @@ export class AudiencesComponent implements OnInit {
         ]
       },
       {
-        key: 'destination',
+        key: 'destinationName',
         label: 'Destino',
         type: 'select',
         sortable: true,
@@ -136,10 +136,18 @@ export class AudiencesComponent implements OnInit {
   async loadAudiences() {
     this.loading = true;
     try {
-      this.audiences = await this.dataService.getAudiences();
+      const result = await this.dataService.getAudiences();
+      this.audiences = result || [];
+      console.log('Audiencias cargadas:', this.audiences);
     } catch (error) {
       console.error('Error loading audiences:', error);
-      alert('Error al cargar las audiencias');
+      this.audiences = [];
+      // Mostrar error más específico
+      if (error instanceof Error) {
+        alert(`Error al cargar las audiencias: ${error.message}`);
+      } else {
+        alert('Error al cargar las audiencias. Verifique la conexión con el backend.');
+      }
     } finally {
       this.loading = false;
     }

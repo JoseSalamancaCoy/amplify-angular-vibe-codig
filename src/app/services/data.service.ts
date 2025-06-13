@@ -14,8 +14,10 @@ import { getCurrentUser } from 'aws-amplify/auth';
   providedIn: 'root'
 })
 export class DataService {
-  // Cliente GraphQL autenticado
-  private client = generateClient<Schema>();
+  // Cliente GraphQL autenticado con modo de autorización específico
+  private client = generateClient<Schema>({
+    authMode: 'userPool'
+  });
 
   constructor() {}
 
@@ -46,7 +48,7 @@ export class DataService {
     pathName: string;
     minSize: number;
     maxSize: number;
-    destination: string;
+    destinationName: string;
     audienceType: 'DTC' | 'HCP' | 'NPI_TO_DTC';
     cadence: string;
     flags?: string;
@@ -270,7 +272,7 @@ export class DataService {
    */
   async searchAudiences(filters: {
     audienceType?: 'DTC' | 'HCP' | 'NPI_TO_DTC';
-    destination?: string;
+    destinationName?: string;
     active?: boolean;
   }) {
     await this.ensureAuthenticated();
@@ -283,8 +285,8 @@ export class DataService {
         filteredData = filteredData.filter(a => a.audienceType === filters.audienceType);
       }
       
-      if (filters.destination) {
-        filteredData = filteredData.filter(a => a.destination === filters.destination);
+      if (filters.destinationName) {
+        filteredData = filteredData.filter(a => a.destinationName === filters.destinationName);
       }
       
       if (filters.active !== undefined) {

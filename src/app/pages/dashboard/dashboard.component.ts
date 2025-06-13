@@ -137,7 +137,7 @@ export class DashboardComponent implements OnInit {
         pathName: '/healthcare/diabetes/hcp',
         minSize: 1000,
         maxSize: 50000,
-        destination: 'Comscore Demo',
+        destinationName: 'Comscore Demo',
         audienceType: 'HCP',
         cadence: 'weekly'
       });
