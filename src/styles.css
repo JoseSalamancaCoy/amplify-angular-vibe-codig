@@ -1,65 +1,197 @@
+/* =============================================================================
+   PURPLELAB DESIGN SYSTEM - MAIN STYLES
+   ============================================================================= */
+
+/* Import design system */
+@import './styles/_variables.scss';
+@import './styles/_mixins.scss';
+@import './styles/_components.scss';
+
+/* =============================================================================
+   GLOBAL STYLES
+   ============================================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+}
+
 body {
-    margin: 0;
-    background: linear-gradient(180deg, rgb(117, 81, 194), rgb(255, 255, 255));
-    display: flex;
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    height: 100vh;
-    width: 100vw;
-    justify-content: center;
-    align-items: center;
+  margin: 0;
+  padding: 0;
+  font-family: "Salesforce Sans", -apple-system, BlinkMacSystemFont, 
+               'avenir next', avenir, helvetica, 'helvetica neue', 
+               ubuntu, roboto, noto, 'segoe ui', arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #1a1a1a;
+  background-color: #f7f8fb;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* =============================================================================
+   RESET STYLES
+   ============================================================================= */
+
+/* Remove default margins from headings and paragraphs */
+h1, h2, h3, h4, h5, h6,
+p, ul, ol, li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Reset list styles */
+ul, ol {
+  list-style: none;
+}
+
+/* Reset link styles */
+a {
+  color: #79589f;
+  text-decoration: none;
+  transition: color 150ms ease-out;
+}
+
+a:hover {
+  color: #4f3074;
+  text-decoration: underline;
+}
+
+/* Reset button styles */
+button {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Reset input styles */
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* =============================================================================
+   LAYOUT UTILITIES
+   ============================================================================= */
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 992px) {
+  .container {
+    padding: 0 24px;
+  }
+}
+
+.container-fluid {
+  width: 100%;
+  padding: 0 16px;
+}
+
+/* =============================================================================
+   ACCESSIBILITY
+   ============================================================================= */
+
+/* Focus styles for better accessibility */
+*:focus {
+  outline: 2px solid #79589f;
+  outline-offset: 2px;
+}
+
+/* Skip link for screen readers */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #79589f;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 9999;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* =============================================================================
+   RESPONSIVE UTILITIES
+   ============================================================================= */
+
+/* Hide/show elements based on screen size */
+@media (max-width: 767px) {
+  .d-md-none {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .d-md-block {
+    display: block !important;
   }
   
-  main {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+  .d-sm-none {
+    display: none !important;
+  }
+}
+
+/* =============================================================================
+   CUSTOM SCROLLBAR (WEBKIT)
+   ============================================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f7f8fb;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cfd7e6;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #62738d;
+}
+
+/* =============================================================================
+   PRINT STYLES
+   ============================================================================= */
+
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
   }
   
-  button {
-    border-radius: 8px;
-    border: 1px solid transparent;
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
-    background-color: #1a1a1a;
-    cursor: pointer;
-    transition: border-color 0.25s;
-    color: white;
-  }
-  button:hover {
-    border-color: #646cff;
-  }
-  button:focus,
-  button:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
+  a,
+  a:visited {
+    text-decoration: underline;
   }
   
-  ul {
-    padding-inline-start: 0;
-    margin-block-start: 0;
-    margin-block-end: 0;
-    list-style-type: none;
-    display: flex;
-    flex-direction: column;
-    margin: 8px 0;
+  .btn {
     border: 1px solid black;
-    gap: 1px;
-    background-color: black;
-    border-radius: 8px;
-    overflow: auto;
   }
   
-  li {
-    background-color: white;
-    padding: 8px;
+  .d-print-none {
+    display: none !important;
   }
-  
-  li:hover {
-    background: #dadbf9;
-  }
-  
-  a {
-    font-weight: 800;
-    text-decoration: none;
-  }
+}

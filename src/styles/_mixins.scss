@@ -1,0 +1,382 @@
+// =============================================================================
+// PURPLELAB DESIGN SYSTEM - MIXINS
+// =============================================================================
+
+@import 'variables';
+
+// -----------------------------------------------------------------------------
+// RESPONSIVE BREAKPOINTS
+// -----------------------------------------------------------------------------
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == xs {
+    @media (min-width: #{$breakpoint-xs}) {
+      @content;
+    }
+  }
+  @if $breakpoint == sm {
+    @media (min-width: #{$breakpoint-sm}) {
+      @content;
+    }
+  }
+  @if $breakpoint == md {
+    @media (min-width: #{$breakpoint-md}) {
+      @content;
+    }
+  }
+  @if $breakpoint == lg {
+    @media (min-width: #{$breakpoint-lg}) {
+      @content;
+    }
+  }
+  @if $breakpoint == xl {
+    @media (min-width: #{$breakpoint-xl}) {
+      @content;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// BUTTON MIXINS
+// -----------------------------------------------------------------------------
+
+@mixin button-base() {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: $font-family-base;
+  font-weight: $font-weight-semibold;
+  line-height: 1;
+  text-decoration: none;
+  border: $border-width solid transparent;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  transition: $transition-all;
+  white-space: nowrap;
+  user-select: none;
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  &:focus {
+    outline: none;
+  }
+}
+
+@mixin button-size($height, $padding-x, $font-size) {
+  height: $height;
+  padding: 0 $padding-x;
+  font-size: $font-size;
+}
+
+@mixin button-variant($bg-color, $text-color, $border-color: $bg-color) {
+  background-color: $bg-color;
+  color: $text-color;
+  border-color: $border-color;
+  
+  &:hover:not(:disabled) {
+    background-color: darken($bg-color, 10%);
+    border-color: darken($border-color, 10%);
+  }
+  
+  &:active:not(:disabled) {
+    background-color: darken($bg-color, 15%);
+    border-color: darken($border-color, 15%);
+    transform: translateY(1px);
+  }
+  
+  &:focus:not(:disabled) {
+    border-color: $border-color;
+    box-shadow: $shadow-focus-primary;
+  }
+}
+
+@mixin button-outline($border-color, $text-color, $hover-bg: rgba($border-color, 0.1)) {
+  background-color: transparent;
+  color: $text-color;
+  border-color: $border-color;
+  
+  &:hover:not(:disabled) {
+    background-color: $hover-bg;
+  }
+  
+  &:active:not(:disabled) {
+    background-color: rgba($border-color, 0.2);
+  }
+  
+  &:focus:not(:disabled) {
+    border-color: $border-color;
+    box-shadow: $shadow-focus-primary;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// FORM MIXINS
+// -----------------------------------------------------------------------------
+
+@mixin form-control-base() {
+  display: block;
+  width: 100%;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-relaxed;
+  color: $gray-900;
+  background-color: $white;
+  border: $border-width solid $border-color;
+  border-radius: $border-radius-sm;
+  transition: $transition-border, $transition-shadow;
+  
+  &::placeholder {
+    color: $gray-600;
+    opacity: 1;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: $purple-primary;
+    box-shadow: $shadow-focus-primary;
+  }
+  
+  &:disabled {
+    background-color: $gray-100;
+    color: $gray-600;
+    cursor: not-allowed;
+  }
+  
+  &.is-invalid {
+    border-color: $red-danger;
+    
+    &:focus {
+      border-color: $red-danger;
+      box-shadow: $shadow-focus-danger;
+    }
+  }
+  
+  &.is-valid {
+    border-color: $green-success;
+    
+    &:focus {
+      border-color: $green-success;
+      box-shadow: $shadow-focus-success;
+    }
+  }
+}
+
+@mixin form-control-size($height, $padding-x, $padding-y, $font-size) {
+  height: $height;
+  padding: $padding-y $padding-x;
+  font-size: $font-size;
+}
+
+// -----------------------------------------------------------------------------
+// CARD MIXINS
+// -----------------------------------------------------------------------------
+
+@mixin card-base() {
+  background-color: $white;
+  border: $border-width solid $border-color;
+  border-radius: $card-border-radius;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+}
+
+@mixin card-elevated() {
+  box-shadow: $shadow-md;
+  
+  &:hover {
+    box-shadow: $shadow-lg;
+    transform: translateY(-2px);
+    transition: $transition-all;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// TABLE MIXINS
+// -----------------------------------------------------------------------------
+
+@mixin table-base() {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: $font-size-base;
+  
+  th,
+  td {
+    padding: $table-cell-padding-y $table-cell-padding-x;
+    text-align: left;
+    border-bottom: $border-width solid $border-color;
+  }
+  
+  th {
+    background-color: $gray-50;
+    font-weight: $font-weight-semibold;
+    color: $gray-700;
+  }
+  
+  tbody tr {
+    &:nth-child(even) {
+      background-color: rgba($gray-50, 0.5);
+    }
+    
+    &:hover {
+      background-color: rgba($purple-light, 0.1);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// TEXT MIXINS
+// -----------------------------------------------------------------------------
+
+@mixin text-truncate() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-break() {
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+@mixin heading($size, $weight: $font-weight-semibold) {
+  font-family: $font-family-base;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line-height-tight;
+  color: $gray-900;
+  margin: 0 0 $spacing-md 0;
+}
+
+// -----------------------------------------------------------------------------
+// LAYOUT MIXINS
+// -----------------------------------------------------------------------------
+
+@mixin container() {
+  width: 100%;
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+  
+  @include respond-to(lg) {
+    padding: 0 $spacing-lg;
+  }
+}
+
+@mixin flex-center() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between() {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin absolute-center() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// -----------------------------------------------------------------------------
+// UTILITY MIXINS
+// -----------------------------------------------------------------------------
+
+@mixin visually-hidden() {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+@mixin clearfix() {
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+}
+
+@mixin focus-visible() {
+  &:focus-visible {
+    outline: 2px solid $purple-primary;
+    outline-offset: 2px;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// ANIMATION MIXINS
+// -----------------------------------------------------------------------------
+
+@mixin loading-shimmer() {
+  background: linear-gradient(
+    90deg,
+    $gray-100 25%,
+    rgba($gray-300, 0.5) 37%,
+    $gray-100 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@mixin pulse() {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// STATE MIXINS
+// -----------------------------------------------------------------------------
+
+@mixin alert-variant($bg-color, $border-color, $text-color) {
+  background-color: $bg-color;
+  border: $border-width solid $border-color;
+  color: $text-color;
+  padding: $spacing-md;
+  border-radius: $border-radius-sm;
+  
+  .alert-icon {
+    color: $text-color;
+  }
+}
+
+@mixin badge-variant($bg-color, $text-color) {
+  background-color: $bg-color;
+  color: $text-color;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $border-radius-pill;
+  font-size: $font-size-caption;
+  font-weight: $font-weight-semibold;
+  line-height: 1;
+  display: inline-block;
+} 

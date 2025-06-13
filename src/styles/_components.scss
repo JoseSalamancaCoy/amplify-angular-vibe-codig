@@ -1,0 +1,615 @@
+// =============================================================================
+// PURPLELAB DESIGN SYSTEM - COMPONENTS
+// =============================================================================
+
+@import 'variables';
+@import 'mixins';
+
+// -----------------------------------------------------------------------------
+// TYPOGRAPHY
+// -----------------------------------------------------------------------------
+
+h1, .h1 {
+  @include heading($font-size-h1, $font-weight-bold);
+  line-height: $line-height-tight;
+}
+
+h2, .h2 {
+  @include heading($font-size-h2, $font-weight-semibold);
+  line-height: $line-height-medium;
+}
+
+h3, .h3 {
+  @include heading($font-size-h3, $font-weight-semibold);
+  line-height: $line-height-normal;
+}
+
+h4, .h4 {
+  @include heading($font-size-h4, $font-weight-semibold);
+  line-height: $line-height-normal;
+}
+
+h5, .h5 {
+  @include heading($font-size-h5, $font-weight-semibold);
+  line-height: $line-height-relaxed;
+}
+
+h6, .h6 {
+  @include heading($font-size-h6, $font-weight-semibold);
+  line-height: $line-height-relaxed;
+}
+
+.text-large {
+  font-size: $font-size-large;
+  line-height: $line-height-loose;
+}
+
+.text-small {
+  font-size: $font-size-small;
+  line-height: $line-height-normal;
+}
+
+.text-caption {
+  font-size: $font-size-caption;
+  line-height: $line-height-medium;
+  color: $gray-600;
+}
+
+// -----------------------------------------------------------------------------
+// BUTTONS
+// -----------------------------------------------------------------------------
+
+.btn {
+  @include button-base();
+  @include button-size($button-height-md, $button-padding-md, $font-size-base);
+  
+  // Primary button
+  &.btn-primary {
+    @include button-variant($purple-primary, $white);
+  }
+  
+  // Secondary button
+  &.btn-secondary {
+    @include button-outline($purple-primary, $purple-primary);
+    background-color: $white;
+  }
+  
+  // Tertiary button
+  &.btn-tertiary {
+    background: transparent;
+    color: $purple-primary;
+    border: none;
+    
+    &:hover:not(:disabled) {
+      background-color: rgba($purple-primary, 0.1);
+    }
+    
+    &:active:not(:disabled) {
+      background-color: rgba($purple-primary, 0.2);
+    }
+  }
+  
+  // Danger button
+  &.btn-danger {
+    @include button-variant($red-danger, $white);
+  }
+  
+  &.btn-danger-outline {
+    @include button-outline($red-danger, $red-danger);
+  }
+  
+  // Success button
+  &.btn-success {
+    @include button-outline($green-success, $green-success);
+  }
+  
+  // Info button
+  &.btn-info {
+    @include button-outline($blue-primary, $blue-primary);
+  }
+  
+  // Warning button
+  &.btn-warning {
+    @include button-outline($orange-warning, $orange-warning);
+  }
+  
+  // Button sizes
+  &.btn-lg {
+    @include button-size($button-height-lg, $button-padding-lg, $font-size-large);
+  }
+  
+  &.btn-sm {
+    @include button-size($button-height-sm, $button-padding-sm, $font-size-small);
+  }
+  
+  // Button with icon
+  &.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    
+    .icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+  // Loading state
+  &.btn-loading {
+    position: relative;
+    color: transparent !important;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border: 2px solid transparent;
+      border-top: 2px solid currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      @include absolute-center();
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+// -----------------------------------------------------------------------------
+// FORM CONTROLS
+// -----------------------------------------------------------------------------
+
+.form-control {
+  @include form-control-base();
+  @include form-control-size($input-height-md, $input-padding-x, $input-padding-y, $font-size-base);
+  
+  &.form-control-lg {
+    @include form-control-size($input-height-lg, $input-padding-x, $input-padding-y + 4px, $font-size-large);
+  }
+  
+  &.form-control-sm {
+    @include form-control-size($input-height-sm, $input-padding-x - 2px, $input-padding-y - 2px, $font-size-small);
+  }
+}
+
+.form-select {
+  @include form-control-base();
+  @include form-control-size($input-height-md, $input-padding-x, $input-padding-y, $font-size-base);
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23#{str-slice(#{$gray-600}, 2)}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right $input-padding-x center;
+  background-size: 16px 12px;
+  padding-right: $input-padding-x + 24px;
+  appearance: none;
+}
+
+.form-label {
+  font-size: $font-size-small;
+  font-weight: $font-weight-semibold;
+  color: $gray-700;
+  margin-bottom: $spacing-xs;
+  display: block;
+}
+
+.form-text {
+  font-size: $font-size-caption;
+  color: $gray-600;
+  margin-top: $spacing-xs;
+}
+
+.form-check {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-sm;
+  
+  .form-check-input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    
+    &[type="checkbox"] {
+      border-radius: $border-radius-sm;
+    }
+    
+    &[type="radio"] {
+      border-radius: 50%;
+    }
+    
+    &:checked {
+      background-color: $purple-primary;
+      border-color: $purple-primary;
+    }
+  }
+  
+  .form-check-label {
+    font-size: $font-size-base;
+    color: $gray-700;
+    cursor: pointer;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// CARDS
+// -----------------------------------------------------------------------------
+
+.card {
+  @include card-base();
+  
+  .card-header {
+    padding: $spacing-lg;
+    border-bottom: $border-width solid $border-color;
+    background-color: $gray-50;
+    
+    .card-title {
+      @include heading($font-size-h5, $font-weight-semibold);
+      margin: 0;
+    }
+  }
+  
+  .card-body {
+    padding: $card-padding;
+  }
+  
+  .card-footer {
+    padding: $spacing-lg;
+    border-top: $border-width solid $border-color;
+    background-color: $gray-50;
+  }
+  
+  &.card-elevated {
+    @include card-elevated();
+  }
+  
+  &.card-outlined {
+    box-shadow: none;
+    border: 2px solid $border-color;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// TABLES
+// -----------------------------------------------------------------------------
+
+.table {
+  @include table-base();
+  
+  &.table-striped {
+    tbody tr:nth-child(odd) {
+      background-color: transparent;
+    }
+    
+    tbody tr:nth-child(even) {
+      background-color: $gray-50;
+    }
+  }
+  
+  &.table-hover {
+    tbody tr:hover {
+      background-color: rgba($purple-light, 0.15);
+    }
+  }
+  
+  &.table-borderless {
+    th, td {
+      border: none;
+    }
+  }
+  
+  &.table-sm {
+    th, td {
+      padding: $spacing-xs $spacing-sm;
+    }
+  }
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+// -----------------------------------------------------------------------------
+// ALERTS
+// -----------------------------------------------------------------------------
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  border-radius: $border-radius-sm;
+  border: $border-width solid transparent;
+  
+  .alert-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+  }
+  
+  .alert-content {
+    flex: 1;
+    
+    .alert-title {
+      font-weight: $font-weight-semibold;
+      margin: 0 0 $spacing-xs 0;
+    }
+    
+    .alert-message {
+      margin: 0;
+      font-size: $font-size-base;
+    }
+  }
+  
+  .alert-close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.7;
+    
+    &:hover {
+      opacity: 1;
+    }
+  }
+  
+  &.alert-info {
+    @include alert-variant($info-bg, $info-border, $blue-primary);
+  }
+  
+  &.alert-success {
+    @include alert-variant($success-bg, $success-border, $green-success);
+  }
+  
+  &.alert-warning {
+    @include alert-variant($warning-bg, $warning-border, $orange-warning);
+  }
+  
+  &.alert-danger {
+    @include alert-variant($danger-bg, $danger-border, $red-danger);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// BADGES
+// -----------------------------------------------------------------------------
+
+.badge {
+  @include badge-variant($gray-500, $white);
+  
+  &.badge-primary {
+    @include badge-variant($purple-primary, $white);
+  }
+  
+  &.badge-success {
+    @include badge-variant($green-success, $white);
+  }
+  
+  &.badge-warning {
+    @include badge-variant($orange-warning, $white);
+  }
+  
+  &.badge-danger {
+    @include badge-variant($red-danger, $white);
+  }
+  
+  &.badge-info {
+    @include badge-variant($blue-primary, $white);
+  }
+  
+  &.badge-light {
+    @include badge-variant($gray-100, $gray-700);
+  }
+  
+  &.badge-outline {
+    background-color: transparent;
+    border: $border-width solid currentColor;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// MODALS
+// -----------------------------------------------------------------------------
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: $z-index-modal-backdrop;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: $z-index-modal;
+  width: 100%;
+  height: 100%;
+  @include flex-center();
+  padding: $spacing-lg;
+  
+  .modal-dialog {
+    background-color: $white;
+    border-radius: $border-radius-md;
+    box-shadow: $shadow-xl;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal-header {
+    @include flex-between();
+    padding: $spacing-lg;
+    border-bottom: $border-width solid $border-color;
+    
+    .modal-title {
+      @include heading($font-size-h4, $font-weight-semibold);
+      margin: 0;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      padding: $spacing-xs;
+      cursor: pointer;
+      color: $gray-600;
+      
+      &:hover {
+        color: $gray-900;
+      }
+    }
+  }
+  
+  .modal-body {
+    padding: $spacing-lg;
+    overflow-y: auto;
+    flex: 1;
+  }
+  
+  .modal-footer {
+    @include flex-between();
+    padding: $spacing-lg;
+    border-top: $border-width solid $border-color;
+    gap: $spacing-sm;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// LOADING STATES
+// -----------------------------------------------------------------------------
+
+.skeleton {
+  @include loading-shimmer();
+  border-radius: $border-radius-sm;
+  
+  &.skeleton-text {
+    height: 1em;
+    margin: 0.5em 0;
+  }
+  
+  &.skeleton-title {
+    height: 1.5em;
+    margin: 0.5em 0;
+  }
+  
+  &.skeleton-circle {
+    border-radius: 50%;
+  }
+  
+  &.skeleton-rect {
+    width: 100%;
+    height: 200px;
+  }
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid $gray-300;
+  border-top: 2px solid $purple-primary;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  
+  &.spinner-sm {
+    width: 16px;
+    height: 16px;
+  }
+  
+  &.spinner-lg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// UTILITY CLASSES
+// -----------------------------------------------------------------------------
+
+// Text utilities
+.text-primary { color: $purple-primary !important; }
+.text-secondary { color: $gray-700 !important; }
+.text-muted { color: $gray-600 !important; }
+.text-success { color: $green-success !important; }
+.text-warning { color: $orange-warning !important; }
+.text-danger { color: $red-danger !important; }
+.text-info { color: $blue-primary !important; }
+
+// Background utilities
+.bg-primary { background-color: $purple-primary !important; }
+.bg-light { background-color: $gray-50 !important; }
+.bg-white { background-color: $white !important; }
+
+// Border utilities
+.border { border: $border-width solid $border-color !important; }
+.border-top { border-top: $border-width solid $border-color !important; }
+.border-bottom { border-bottom: $border-width solid $border-color !important; }
+.border-left { border-left: $border-width solid $border-color !important; }
+.border-right { border-right: $border-width solid $border-color !important; }
+
+// Spacing utilities
+@each $prop, $abbrev in (margin: m, padding: p) {
+  @each $size, $length in (
+    xs: $spacing-xs,
+    sm: $spacing-sm,
+    md: $spacing-md,
+    lg: $spacing-lg,
+    xl: $spacing-xl,
+    2xl: $spacing-2xl,
+    3xl: $spacing-3xl
+  ) {
+    .#{$abbrev}-#{$size} { #{$prop}: $length !important; }
+    .#{$abbrev}t-#{$size} { #{$prop}-top: $length !important; }
+    .#{$abbrev}b-#{$size} { #{$prop}-bottom: $length !important; }
+    .#{$abbrev}l-#{$size} { #{$prop}-left: $length !important; }
+    .#{$abbrev}r-#{$size} { #{$prop}-right: $length !important; }
+    .#{$abbrev}x-#{$size} {
+      #{$prop}-left: $length !important;
+      #{$prop}-right: $length !important;
+    }
+    .#{$abbrev}y-#{$size} {
+      #{$prop}-top: $length !important;
+      #{$prop}-bottom: $length !important;
+    }
+  }
+}
+
+// Flexbox utilities
+.d-flex { display: flex !important; }
+.d-inline-flex { display: inline-flex !important; }
+.flex-column { flex-direction: column !important; }
+.flex-row { flex-direction: row !important; }
+.justify-content-start { justify-content: flex-start !important; }
+.justify-content-center { justify-content: center !important; }
+.justify-content-end { justify-content: flex-end !important; }
+.justify-content-between { justify-content: space-between !important; }
+.align-items-start { align-items: flex-start !important; }
+.align-items-center { align-items: center !important; }
+.align-items-end { align-items: flex-end !important; }
+
+// Display utilities
+.d-none { display: none !important; }
+.d-block { display: block !important; }
+.d-inline { display: inline !important; }
+.d-inline-block { display: inline-block !important; }
+
+// Text alignment
+.text-left { text-align: left !important; }
+.text-center { text-align: center !important; }
+.text-right { text-align: right !important; }
+
+// Visibility
+.sr-only {
+  @include visually-hidden();
+} 

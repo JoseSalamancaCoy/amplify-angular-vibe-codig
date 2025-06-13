@@ -1,0 +1,320 @@
+/* PurpleLab OTS - Main Layout Styles */
+
+/* Variables de colores PurpleLab */
+:host {
+  --purplelab-primary: #79589f;
+  --purplelab-secondary: #9b7dc7;
+  --purplelab-accent: #5c4084;
+  --purplelab-neutral-100: #f8fafc;
+  --purplelab-neutral-200: #e2e8f0;
+  --purplelab-neutral-600: #64748b;
+  --purplelab-neutral-700: #475569;
+  --purplelab-neutral-800: #334155;
+
+  /* Layout dimensions */
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 70px;
+  --top-nav-height: 64px;
+}
+
+/* Personalización del Authenticator */
+.purplelab-header {
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--purplelab-primary) 0%, var(--purplelab-secondary) 100%);
+  color: white;
+  border-radius: 12px 12px 0 0;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.logo-placeholder {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+}
+
+.brand-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: white;
+}
+
+.brand-subtitle {
+  font-size: 1.1rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.signin-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--purplelab-primary);
+  margin: 0 0 0.5rem 0;
+  text-align: center;
+}
+
+.signin-subtitle {
+  color: var(--purplelab-neutral-600);
+  margin: 0;
+  text-align: center;
+}
+
+.purplelab-footer {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--purplelab-neutral-100);
+  border-radius: 0 0 12px 12px;
+  border-top: 1px solid var(--purplelab-neutral-200);
+}
+
+.copyright {
+  margin: 0 0 0.5rem 0;
+  color: var(--purplelab-neutral-600);
+  font-size: 0.9rem;
+}
+
+.security-notice {
+  margin: 0;
+  color: var(--purplelab-accent);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* === LAYOUT PRINCIPAL === */
+
+.app-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.3s ease;
+  background: var(--purplelab-neutral-100);
+  min-height: 100vh;
+}
+
+.main-content.sidebar-collapsed {
+  margin-left: var(--sidebar-collapsed-width);
+}
+
+/* === TOP NAVIGATION === */
+
+.top-nav {
+  height: var(--top-nav-height);
+  background: white;
+  border-bottom: 1px solid var(--purplelab-neutral-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Mobile menu toggle */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--purplelab-neutral-700);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.mobile-menu-toggle:hover {
+  background: var(--purplelab-neutral-100);
+}
+
+.hamburger-icon {
+  display: block;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.breadcrumb-item {
+  color: var(--purplelab-neutral-600);
+}
+
+.breadcrumb-separator {
+  color: var(--purplelab-neutral-600);
+  margin: 0 0.25rem;
+}
+
+.breadcrumb-current {
+  color: var(--purplelab-neutral-800);
+  font-weight: 600;
+}
+
+/* User menu */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.welcome-text {
+  font-size: 0.9rem;
+  color: var(--purplelab-neutral-700);
+}
+
+.signout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--purplelab-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.signout-btn:hover {
+  background: var(--purplelab-accent);
+  transform: translateY(-1px);
+}
+
+.logout-icon {
+  font-size: 0.9rem;
+}
+
+/* === PAGE CONTENT === */
+
+.page-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  max-width: 100%;
+}
+
+/* === RESPONSIVE DESIGN === */
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
+
+  .main-content.sidebar-collapsed {
+    margin-left: 0;
+  }
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  .top-nav {
+    padding: 0 1rem;
+  }
+
+  .nav-left {
+    gap: 0.75rem;
+  }
+
+  .user-menu {
+    gap: 0.75rem;
+  }
+
+  .welcome-text {
+    display: none;
+  }
+
+  .signout-btn {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .page-content {
+    padding: 1rem;
+  }
+
+  .breadcrumbs {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .breadcrumb-item {
+    display: none;
+  }
+
+  .breadcrumb-separator {
+    display: none;
+  }
+
+  .page-content {
+    padding: 0.75rem;
+  }
+}
+
+/* === ANIMATIONS === */
+
+.main-content,
+.mobile-menu-toggle,
+.signout-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === FOCUS STATES === */
+
+.mobile-menu-toggle:focus,
+.signout-btn:focus {
+  outline: 2px solid var(--purplelab-primary);
+  outline-offset: 2px;
+}
+
+/* === AMPLIFY UI OVERRIDES === */
+
+amplify-authenticator {
+  --amplify-components-authenticator-router-background-color: white;
+  --amplify-components-authenticator-router-border-radius: 16px;
+  --amplify-components-authenticator-router-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --amplify-components-button-primary-background-color: var(--purplelab-primary);
+  --amplify-components-button-primary-hover-background-color: var(--purplelab-accent);
+  --amplify-components-fieldcontrol-focus-border-color: var(--purplelab-primary);
+}

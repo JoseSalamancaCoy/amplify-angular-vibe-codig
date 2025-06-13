@@ -1,1 +1,83 @@
-<app-todos></app-todos>
+<amplify-authenticator [hideSignUp]="true" [formFields]="formFields">
+  <!-- Header con logo de PurpleLab -->
+  <ng-template amplifySlot="header">
+    <div class="purplelab-header">
+      <div class="logo-container">
+        <div class="logo-placeholder">PL</div>
+        <h1 class="brand-title">PurpleLab OTS</h1>
+      </div>
+      <p class="brand-subtitle">Healthcare Analytics Platform</p>
+    </div>
+  </ng-template>
+
+  <!-- Personalizar header del sign-in -->
+  <ng-template amplifySlot="sign-in-header">
+    <h2 class="signin-title">Acceso al Sistema</h2>
+    <p class="signin-subtitle">Ingrese sus credenciales corporativas para continuar</p>
+  </ng-template>
+
+  <!-- Footer corporativo -->
+  <ng-template amplifySlot="footer">
+    <div class="purplelab-footer">
+      <p class="copyright">© 2024 PurpleLab. Todos los derechos reservados.</p>
+      <p class="security-notice">Sistema protegido - Solo personal autorizado</p>
+    </div>
+  </ng-template>
+
+  <!-- Contenido autenticado con layout y sidebar -->
+  <ng-template
+    amplifySlot="authenticated"
+    let-user="user"
+    let-signOut="signOut"
+  >
+    <div class="app-layout">
+      <!-- Sidebar Navigation -->
+      <app-sidebar
+        [isCollapsed]="isSidebarCollapsed"
+        [isMobileOpen]="isMobileMenuOpen"
+        (collapseChange)="onSidebarCollapseChange($event)"
+        (mobileToggle)="onSidebarMobileToggle($event)"
+      ></app-sidebar>
+
+      <!-- Main Content Area -->
+      <main class="main-content" [class.sidebar-collapsed]="isSidebarCollapsed">
+        <!-- Top Navigation Bar -->
+        <header class="top-nav">
+          <div class="nav-left">
+            <!-- Mobile menu toggle -->
+            <button 
+              class="mobile-menu-toggle"
+              (click)="toggleMobileSidebar()"
+              aria-label="Abrir menú de navegación"
+            >
+              <span class="hamburger-icon">☰</span>
+            </button>
+
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumbs">
+              <span class="breadcrumb-item">PurpleLab OTS</span>
+              <span class="breadcrumb-separator">›</span>
+              <span class="breadcrumb-current">{{ getCurrentPageTitle() }}</span>
+            </nav>
+          </div>
+
+          <div class="nav-right">
+            <!-- User info -->
+            <div class="user-menu">
+              <span class="welcome-text">Bienvenido, {{ user.username }}</span>
+              <button class="signout-btn" (click)="signOut()">
+                <span class="logout-icon">🚪</span>
+                Cerrar Sesión
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="page-content">
+          <router-outlet></router-outlet>
+        </div>
+      </main>
+    </div>
+  </ng-template>
+</amplify-authenticator>
