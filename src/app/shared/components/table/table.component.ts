@@ -150,4 +150,8 @@ export class TableComponent {
         return String(value);
     }
   }
+
+  trackByFn(index: number, item: any): any {
+    return item.id || index;
+  }
 }
