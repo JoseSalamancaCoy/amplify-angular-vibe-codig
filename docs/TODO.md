@@ -365,4 +365,29 @@ npx amplify push
 npx amplify codegen
 ```
 
+---
+
+## 📚 GUÍAS DE AMPLIFY INTEGRADAS
+
+### Conexión con API de Datos
+- **Guía oficial**: [Connect to API](https://docs.amplify.aws/angular/build-a-backend/data/connect-to-API/)
+- **Configuración del cliente**: Usar `generateClient<Schema>()` con modo de autorización específico
+- **Modos de autorización**: `userPool`, `apiKey`, `identityPool`, `oidc`, `lambda`
+- **Headers personalizados**: Configuración por cliente o por request
+
+### Modelado de Datos
+- **Guía oficial**: [Data Modeling](https://docs.amplify.aws/angular/build-a-backend/data/data-modeling/)
+- **Agregar campos**: [Add Fields](https://docs.amplify.aws/angular/build-a-backend/data/data-modeling/add-fields/)
+- **Tipos soportados**: `string`, `integer`, `boolean`, `datetime`, `enum`
+- **Relaciones**: `belongsTo`, `hasMany`, `hasOne`
+- **Autorización**: `allow.authenticated()`, `allow.owner()`, `allow.groups()`
+
+### Implementación Actual
+- ✅ **Cliente configurado**: `generateClient<Schema>({ authMode: 'userPool' })`
+- ✅ **Esquema corregido**: Relaciones simplificadas sin conflictos
+- ✅ **Autorización**: Todos los modelos requieren autenticación
+- ✅ **Tipos TypeScript**: Generados automáticamente desde el esquema
+
+---
+
 **¿TIENES ALGUNA DUDA O NECESITAS CLARIFICACIÓN SOBRE ALGUNA FEATURE?**
