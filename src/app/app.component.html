@@ -1,10 +1,116 @@
-<amplify-authenticator>
+<amplify-authenticator [hideSignUp]="true" [formFields]="formFields">
+  <!-- Header con logo de PurpleLab -->
+  <ng-template amplifySlot="header">
+    <div class="purplelab-header">
+      <div class="logo-container">
+        <div class="logo-placeholder">PL</div>
+        <h1 class="brand-title">PurpleLab OTS</h1>
+      </div>
+      <p class="brand-subtitle">Healthcare Analytics Platform</p>
+    </div>
+  </ng-template>
+
+  <!-- Personalizar header del sign-in -->
+  <ng-template amplifySlot="sign-in-header">
+    <h2 class="signin-title">Acceso al Sistema</h2>
+    <p class="signin-subtitle">Ingrese sus credenciales corporativas para continuar</p>
+  </ng-template>
+
+  <!-- Footer corporativo -->
+  <ng-template amplifySlot="footer">
+    <div class="purplelab-footer">
+      <p class="copyright">© 2024 PurpleLab. Todos los derechos reservados.</p>
+      <p class="security-notice">Sistema protegido - Solo personal autorizado</p>
+    </div>
+  </ng-template>
+
+  <!-- Contenido autenticado -->
   <ng-template
     amplifySlot="authenticated"
     let-user="user"
     let-signOut="signOut"
   >
-    <app-todos></app-todos>
-    <button (click)="signOut()">Sign Out</button>
+    <div class="dashboard-wrapper">
+      <!-- Header del dashboard -->
+      <header class="dashboard-header">
+        <div class="header-content">
+          <div class="brand-info">
+            <h1>PurpleLab OTS</h1>
+            <span>Healthcare Analytics</span>
+          </div>
+          <div class="user-info">
+            <span class="welcome-text">Bienvenido, {{ user.username }}</span>
+            <button class="signout-button" (click)="signOut()">
+              Cerrar Sesión
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Contenido principal -->
+      <main class="dashboard-main">
+        <div class="dashboard-content">
+          <h2>Panel de Control OTS</h2>
+          <p>Sistema de gestión de audiencias predictivas para healthcare</p>
+          
+                     <!-- Stats cards -->
+           <div class="stats-grid">
+             <div class="stat-card">
+               <h3>Audiencias Totales</h3>
+               <p class="stat-number">{{ loading ? '...' : dashboardStats.totalAudiences }}</p>
+               <span class="stat-subtitle">{{ dashboardStats.activeAudiences }} activas</span>
+             </div>
+             <div class="stat-card">
+               <h3>Destinos Conectados</h3>
+               <p class="stat-number">{{ loading ? '...' : dashboardStats.totalDestinations }}</p>
+               <span class="stat-subtitle">Plataformas integradas</span>
+             </div>
+             <div class="stat-card">
+               <h3>Total Entregas</h3>
+               <p class="stat-number">{{ loading ? '...' : dashboardStats.totalDeliveries }}</p>
+               <span class="stat-subtitle">Registros procesados</span>
+             </div>
+           </div>
+
+           <!-- Botón para crear datos de ejemplo -->
+           <div class="demo-section" *ngIf="dashboardStats.totalAudiences === 0 && !loading">
+             <div class="demo-card">
+               <h3>🚀 Empezar con Datos de Demo</h3>
+               <p>No hay datos aún. ¿Quieres crear algunos datos de ejemplo para explorar el sistema?</p>
+               <button 
+                 class="demo-button" 
+                 (click)="createSampleData()"
+                 [disabled]="loading"
+               >
+                 {{ loading ? 'Creando...' : 'Crear Datos de Demo' }}
+               </button>
+             </div>
+           </div>
+
+          <!-- Menu de navegación -->
+          <div class="navigation-menu">
+            <h3>Módulos del Sistema</h3>
+            <div class="nav-grid">
+              <div class="nav-item">
+                <span class="nav-icon">👥</span>
+                <span>Audiencias</span>
+              </div>
+              <div class="nav-item">
+                <span class="nav-icon">🎯</span>
+                <span>Destinos</span>
+              </div>
+              <div class="nav-item">
+                <span class="nav-icon">🌉</span>
+                <span>Puentes de Datos</span>
+              </div>
+              <div class="nav-item">
+                <span class="nav-icon">🏢</span>
+                <span>Inquilinos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
   </ng-template>
 </amplify-authenticator>

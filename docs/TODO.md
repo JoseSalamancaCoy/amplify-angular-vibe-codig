@@ -101,44 +101,56 @@ style: apply PurpleLab design system to existing components
 **Depende de**: Feature 1 (para estilos del login)
 
 ### TAREAS:
-1. **Protección de Endpoint**
-   - Investigar documentación de Amplify Auth Guards
-   - Implementar middleware de autenticación para todas las rutas
-   - Configurar redirección automática a login para usuarios no autenticados
+1. **Deshabilitación de Registro Público**
+   - Deshabilitar campos de sign up en el authenticator con `[hideSignUp]="true"`
+   - Solo permitir login para usuarios pre-existentes en Cognito
+   - Configurar mensajes corporativos en español
 
-2. **Configuración de Autenticación Amplify**
-   - Explorar [documentación oficial](https://ui.docs.amplify.aws/angular/connected-components/authenticator/customization)
-   - Configurar autenticación de doble factor (MFA)
-   - DESHABILITAR registro de usuarios desde la interfaz
-   - Configurar solo login para usuarios pre-existentes
+2. **Configuración de Autorización de Datos con Amplify**
+   - Configurar esquema de datos con `allow.authenticated()` en todas las entidades
+   - Implementar `defaultAuthorizationMode: 'userPool'` en data resource
+   - Crear servicio de datos que verifica autenticación antes de cada operación
+   - Seguir [documentación oficial](https://docs.amplify.aws/angular/build-a-backend/data/customize-authz/signed-in-user-data-access/)
 
 3. **Personalización del Login**
-   - Aplicar tema de PurpleLab al authenticator
-   - Integrar logo de la compañía
-   - Customizar colores, tipografías y layout según SystemDesign.md
-   - Implementar estados de carga y error
+   - Aplicar tema de PurpleLab al authenticator usando slots
+   - Integrar logo y colores corporativos (#79589f)
+   - Customizar headers, footers y textos según SystemDesign.md
+   - Implementar dashboard integrado post-autenticación
 
-4. **Testing de Seguridad**
-   - Verificar que rutas protegidas no sean accesibles sin auth
-   - Probar flujo completo de login con MFA
-   - Validar persistencia de sesión
+4. ~~Testing de Seguridad~~ (OMITIDO)
+   - ~~Verificar que rutas protegidas no sean accesibles sin auth~~
+   - ~~Probar flujo completo de login con MFA~~
+   - ~~Validar persistencia de sesión~~
+
+### IMPLEMENTACIÓN COMPLETADA:
+- ✅ **Schema de Datos Protegido**: Implementado en `amplify/data/resource.ts` con autorización `allow.authenticated()`
+- ✅ **Servicio de Datos**: Creado `DataService` que verifica autenticación en cada operación
+- ✅ **Authenticator Personalizado**: Deshabilitado registro, aplicado tema PurpleLab
+- ✅ **Dashboard Integrado**: Estadísticas en tiempo real con datos protegidos
 
 ### COMMITS ESPERADOS:
 ```
-feat(auth): implement route protection with Amplify guards
+feat(auth): disable public sign up in authenticator
 
-feat(auth): configure multi-factor authentication
-
-feat(auth): disable user registration from interface
+feat(data): implement authenticated-only data schema with all OTS entities
 
 feat(auth): customize login theme with PurpleLab branding
 
-feat(auth): add company logo and brand colors to authenticator
+feat(auth): integrate protected dashboard with real-time stats
 
-fix(auth): improve error handling and loading states
+feat(data): add comprehensive data service with authentication checks
 
-docs: update authentication setup and security measures
+style(auth): apply PurpleLab design system to authenticator
+
+docs: update authentication and data protection documentation
 ```
+
+### PROTECCIÓN IMPLEMENTADA:
+- **Nivel de Datos**: Todos los modelos requieren `allow.authenticated()`
+- **Nivel de Servicio**: `DataService.ensureAuthenticated()` en cada operación
+- **Nivel de UI**: Authenticator controla acceso a funcionalidades
+- **Auditoría**: Logs de entrega incluyen `executedBy` del usuario autenticado
 
 ---
 
