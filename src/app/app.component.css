@@ -1,0 +1,368 @@
+/* PurpleLab OTS - Estilos de Autenticación y Dashboard */
+
+/* Variables de colores PurpleLab */
+:host {
+  --purplelab-primary: #79589f;
+  --purplelab-secondary: #9b7dc7;
+  --purplelab-accent: #5c4084;
+  --purplelab-neutral-100: #f8fafc;
+  --purplelab-neutral-200: #e2e8f0;
+  --purplelab-neutral-600: #64748b;
+  --purplelab-neutral-700: #475569;
+  --purplelab-neutral-800: #334155;
+}
+
+/* Personalización del Authenticator */
+.purplelab-header {
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--purplelab-primary) 0%, var(--purplelab-secondary) 100%);
+  color: white;
+  border-radius: 12px 12px 0 0;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.logo-placeholder {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+}
+
+.brand-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: white;
+}
+
+.brand-subtitle {
+  font-size: 1.1rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.signin-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--purplelab-primary);
+  margin: 0 0 0.5rem 0;
+  text-align: center;
+}
+
+.signin-subtitle {
+  color: var(--purplelab-neutral-600);
+  margin: 0;
+  text-align: center;
+}
+
+.purplelab-footer {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--purplelab-neutral-100);
+  border-radius: 0 0 12px 12px;
+  border-top: 1px solid var(--purplelab-neutral-200);
+}
+
+.copyright {
+  margin: 0 0 0.5rem 0;
+  color: var(--purplelab-neutral-600);
+  font-size: 0.9rem;
+}
+
+.security-notice {
+  margin: 0;
+  color: var(--purplelab-accent);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Dashboard Styles */
+.dashboard-wrapper {
+  min-height: 100vh;
+  background: var(--purplelab-neutral-100);
+}
+
+.dashboard-header {
+  background: linear-gradient(135deg, var(--purplelab-primary) 0%, var(--purplelab-secondary) 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brand-info h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.brand-info span {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.welcome-text {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.signout-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.signout-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.dashboard-main {
+  padding: 2rem;
+}
+
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-content h2 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--purplelab-neutral-800);
+  margin: 0 0 0.5rem 0;
+}
+
+.dashboard-content > p {
+  color: var(--purplelab-neutral-600);
+  font-size: 1.1rem;
+  margin: 0 0 3rem 0;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--purplelab-neutral-200);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(121, 88, 159, 0.15);
+}
+
+.stat-card h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--purplelab-neutral-600);
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--purplelab-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.stat-subtitle {
+  font-size: 0.85rem;
+  color: var(--purplelab-neutral-600);
+  font-style: italic;
+}
+
+/* Demo Section */
+.demo-section {
+  margin: 3rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.demo-card {
+  background: white;
+  border-radius: 16px;
+  padding: 3rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 2px dashed var(--purplelab-neutral-200);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+.demo-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--purplelab-neutral-800);
+  margin: 0 0 1rem 0;
+}
+
+.demo-card p {
+  color: var(--purplelab-neutral-600);
+  font-size: 1rem;
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+}
+
+.demo-button {
+  background: linear-gradient(135deg, var(--purplelab-primary) 0%, var(--purplelab-secondary) 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 8px rgba(121, 88, 159, 0.3);
+}
+
+.demo-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(121, 88, 159, 0.4);
+}
+
+.demo-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Navigation Menu */
+.navigation-menu {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--purplelab-neutral-200);
+}
+
+.navigation-menu h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--purplelab-neutral-800);
+  margin: 0 0 2rem 0;
+}
+
+.nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 1rem;
+  background: var(--purplelab-neutral-100);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.nav-item:hover {
+  background: white;
+  border-color: var(--purplelab-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(121, 88, 159, 0.15);
+}
+
+.nav-icon {
+  font-size: 2.5rem;
+}
+
+.nav-item span:last-child {
+  font-weight: 600;
+  color: var(--purplelab-neutral-800);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .user-info {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .dashboard-main {
+    padding: 1rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .nav-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .demo-card {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* Amplify UI Overrides */
+amplify-authenticator {
+  --amplify-components-authenticator-router-background-color: white;
+  --amplify-components-authenticator-router-border-radius: 16px;
+  --amplify-components-authenticator-router-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --amplify-components-button-primary-background-color: var(--purplelab-primary);
+  --amplify-components-button-primary-hover-background-color: var(--purplelab-accent);
+  --amplify-components-fieldcontrol-focus-border-color: var(--purplelab-primary);
+}
